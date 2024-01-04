@@ -5,7 +5,6 @@ import android.content.*;
 import android.os.*;
 import android.view.*;
 import android.widget.*;
-import java.io.*;
 import java.util.*;
 import ru.net.serbis.folder.player.*;
 import ru.net.serbis.folder.player.adapter.*;
@@ -99,8 +98,28 @@ public class Main extends Activity implements AdapterView.OnItemClickListener, P
     {
         SharedPreferences preferences = SysTool.get().getPreferences(this);
         int position = preferences.getInt(Constants.LAST_MEDIA_FILE, 0);
+        setPosition(position, false);
+    }
+    
+    private void setPosition(final int position, boolean smooth)
+    {
         list.setItemChecked(position, true);
-        list.smoothScrollToPosition(position);
+        if (smooth)
+        {
+            list.smoothScrollToPosition(position);
+        }
+        else
+        {
+            list.post(
+                new Runnable()
+                {
+                    public void run()
+                    {
+                        list.setSelection(position);
+                    }
+                }
+            );
+        }
     }
 
     private void initPlayer()
@@ -289,8 +308,7 @@ public class Main extends Activity implements AdapterView.OnItemClickListener, P
     public void play(int position)
     {
         savePosition(position);
-        list.setItemChecked(position, true);
-        list.smoothScrollToPosition(position);
+        setPosition(position, true);
         pause();
         playPause();
     }
