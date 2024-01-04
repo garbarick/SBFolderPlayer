@@ -40,16 +40,18 @@ public class Main extends Activity implements AdapterView.OnItemClickListener, P
 
         main = UITool.get().findView(this, R.id.main);
         bar = UITool.get().findView(this, R.id.progress);
-        initList();
 
         seek = UITool.get().findView(this, R.id.seek);
         seek.setOnSeekBarChangeListener(new SeekBarListener(this));
 
         trackSeek = UITool.get().findView(this, R.id.track_seek);
         trackLength = UITool.get().findView(this, R.id.track_lenght);
-        buttons = new ButtonsListener(this);
+
         playPause = UITool.get().findView(this, R.id.play_pause);
+
         initPlayer();
+        buttons = new ButtonsListener(this);
+        initList();
     }
 
     public Player getPlayer()
