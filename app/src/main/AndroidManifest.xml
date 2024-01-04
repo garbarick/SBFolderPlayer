@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    package="ru.net.serbis.folder.player" >
+
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="ru.net.serbis.share.BIND_FILES_SERVICE"/>
+
+    <application
+        android:name=".App"
+        android:allowBackup="true"
+        android:icon="@drawable/app"
+        android:label="@string/app"
+        android:theme="@android:style/Theme.DeviceDefault"
+		android:resizeableActivity = "true">
+
+        <activity
+            android:name=".activity.Main"
+            android:launchMode="singleTask">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN"/>
+                <category android:name="android.intent.category.LAUNCHER"/>
+            </intent-filter>
+        </activity>
+
+        <activity
+            android:name=".activity.ExceptionReport"
+            android:label="@string/uncaught_exception">
+        </activity>
+
+    </application>
+
+</manifest>
