@@ -42,4 +42,9 @@ public class NotificationProgress extends Notification.Builder
     {
         manager.cancel(id);
     }
+
+    public static NotificationProgress get(Context context, int stringId)
+    {
+        return new NotificationProgress(context, stringId);
+    }
 }

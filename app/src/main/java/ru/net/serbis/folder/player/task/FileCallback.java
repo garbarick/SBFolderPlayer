@@ -1,24 +1,26 @@
 package ru.net.serbis.folder.player.task;
 
-import ru.net.serbis.folder.player.activity.*;
+import android.content.*;
 import ru.net.serbis.folder.player.data.*;
 import ru.net.serbis.folder.player.util.*;
 
 public class FileCallback implements TaskCallback<String>
 {
-    private Main activity;
+    private Context context;
+    private Player player;
     private String path;
 
-    public FileCallback(Main activity, String path)
+    public FileCallback(Context context, Player player, String path)
     {
-        this.activity = activity;
+        this.context = context;
+        this.player = player;
         this.path = path;
     }
 
     @Override
     public void progress(int progress)
     {
-        activity.progress(progress);
+        player.fileLoadProgress(progress);
     }
 
     @Override
@@ -28,17 +30,17 @@ public class FileCallback implements TaskCallback<String>
         {
             if (error != null)
             {
-                activity.setError(error);
+                UITool.get().toast(context, error);
             }
             else
             {
                 result = TempFiles.get().addFile(path, result);
-                activity.setFilePath(result);
+                player.play(result);
             }
         }
         finally
         {
-            activity.finishResult();
+            player.finishFileLoading();
         }
     }
 }

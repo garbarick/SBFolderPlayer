@@ -3,6 +3,7 @@ package ru.net.serbis.folder.player.task;
 import java.util.*;
 import ru.net.serbis.folder.player.activity.*;
 import ru.net.serbis.folder.player.data.*;
+import ru.net.serbis.folder.player.util.*;
 
 public class FilesListCallback implements TaskCallback<Set<String>>
 {
@@ -26,7 +27,7 @@ public class FilesListCallback implements TaskCallback<Set<String>>
         {
             if (error != null)
             {
-                activity.setError(error);
+                UITool.get().toast(activity, error);
             }
             else
             {
@@ -35,7 +36,7 @@ public class FilesListCallback implements TaskCallback<Set<String>>
         }
         finally
         {
-            activity.finishResult();
+            activity.finishFileListLiading();
         }
     }
 }

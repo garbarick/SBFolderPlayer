@@ -6,7 +6,6 @@ import ru.net.serbis.folder.player.activity.*;
 import ru.net.serbis.folder.player.data.*;
 import ru.net.serbis.folder.player.dialog.*;
 import ru.net.serbis.folder.player.extension.share.*;
-import ru.net.serbis.folder.player.notification.*;
 import ru.net.serbis.folder.player.task.*;
 import ru.net.serbis.folder.player.util.*;
 
@@ -44,7 +43,7 @@ public class ButtonsListener implements View.OnClickListener
                 skipLeft();
                 break;
             case R.id.play_pause:
-                activity.playPause();
+                activity.getPlayer().playPause();
                 break;
             case R.id.skip_right:
                 skipRight();
@@ -90,11 +89,7 @@ public class ButtonsListener implements View.OnClickListener
 
     private void previousFile()
     {
-        int position = activity.getPosition(-1);
-        if (position > -1)
-        {
-            activity.play(position);
-        }
+        activity.getPlayer().playPrevious();
     }
 
     private void skipLeft()
@@ -109,10 +104,6 @@ public class ButtonsListener implements View.OnClickListener
 
     private void nextFile()
     {
-        int position = activity.getPosition(1);
-        if (position > -1)
-        {
-            activity.play(position);
-        }
+        activity.getPlayer().playNext();
     }
 }

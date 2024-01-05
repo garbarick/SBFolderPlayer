@@ -3,20 +3,25 @@ package ru.net.serbis.folder.player.util;
 import android.content.*;
 import android.media.*;
 import java.util.*;
+import ru.net.serbis.folder.player.*;
+import ru.net.serbis.folder.player.data.*;
+import ru.net.serbis.folder.player.extension.share.*;
+import ru.net.serbis.folder.player.notification.*;
+import ru.net.serbis.folder.player.task.*;
 
 public class Player extends TimerTask implements MediaPlayer.OnErrorListener, MediaPlayer.OnCompletionListener
 {
     public interface PlayerListener
     {
         void playerProgress(int currentPosition);
-        
         void playerDuration(int duration);
-
         void playerPlay();
-
         void playerPause();
-        
-        void complete();
+        void setPosition(int position);
+
+        void startFileLoading();
+        void fileLoadProgress(int progress);
+        void finishFileLoading();
     }
 
     private List<PlayerListener> listeners = new ArrayList<PlayerListener>();
@@ -24,11 +29,64 @@ public class Player extends TimerTask implements MediaPlayer.OnErrorListener, Me
     private String lastPath = "";
     private Timer timer = new Timer();
     private Context context;
+    private List<String> files = new ArrayList<String>();
+    private int position;
+    private NotificationProgress notification;
 
     public Player(Context context)
     {
         this.context = context;
+        init();
         timer.schedule(this, 0, 1000);
+    }
+
+    private void init()
+    {
+        SharedPreferences preferences = SysTool.get().getPreferences(context);
+        files.addAll(new TreeSet<String>(preferences.getStringSet(Constants.MEDIA_FILES, Collections.<String>emptySet())));
+        position = preferences.getInt(Constants.LAST_MEDIA_FILE, 0);
+    }
+
+    public List<String> getFiles()
+    {
+        return files;
+    }
+
+    public void setFiles(Set<String> files)
+    {
+        this.files.clear();
+        this.files.addAll(files);
+        SharedPreferences.Editor editor = SysTool.get().getPreferencesEditor(context);
+        editor.putStringSet(Constants.MEDIA_FILES, files);
+        editor.commit();
+    }
+
+    public int getPosition()
+    {
+        return position;
+    }
+    
+    public int getPosition(int delta)
+    {
+        int position = this.position + delta;
+        if (position < files.size())
+        {
+            return position;
+        }
+        return -1;
+    }
+
+    public void setPosition(int position)
+    {
+        this.position = position;
+        SharedPreferences.Editor editor = SysTool.get().getPreferencesEditor(context);
+        editor.putInt(Constants.LAST_MEDIA_FILE, position);
+        editor.commit();
+
+        for (PlayerListener listener : listeners)
+        {
+            listener.setPosition(position);
+        }
     }
 
     public void setListener(PlayerListener listener)
@@ -55,13 +113,15 @@ public class Player extends TimerTask implements MediaPlayer.OnErrorListener, Me
         listeners.remove(listener);
     }
 
-    public void pause()
+    public boolean pause()
     {
         if (isPlaying())
         {
             player.pause();
             playerPause();
+            return true;
         }
+        return false;
     }
 
     public void play(String path)
@@ -203,9 +263,19 @@ public class Player extends TimerTask implements MediaPlayer.OnErrorListener, Me
     public void onCompletion(MediaPlayer player)
     {
         playerPause();
-        for (PlayerListener listener : listeners)
+
+        int position = getPosition(1);
+        if (position == -1 && files.size() > 0)
         {
-            listener.complete();
+            position = 0;
+        }
+        if (position == -1 )
+        {
+            pause();
+        }
+        else
+        {
+            play(position);
         }
     }
 
@@ -244,5 +314,82 @@ public class Player extends TimerTask implements MediaPlayer.OnErrorListener, Me
             return;
         }
         player.seekTo(time);
+    }
+
+    public void playNext()
+    {
+        int position = getPosition(1);
+        if (position > -1)
+        {
+            play(position);
+        }
+    }
+
+    public void playPrevious()
+    {
+        int position = getPosition(-1);
+        if (position > -1)
+        {
+            play(position);
+        }
+    }
+    
+    public void play(int position)
+    {
+        setPosition(position);
+        pause();
+        playPause();
+    }
+    
+    public void playPause()
+    {
+        if (pause())
+        {
+            return;
+        }
+        String path = files.get(position);
+        if (ShareTools.get().isSharePath(path))
+        {
+            if (TempFiles.get().has(path))
+            {
+                play(TempFiles.get().get(path));
+            }
+            else
+            {
+                notification = NotificationProgress.get(context, R.string.folder_music_player_loading_files);
+                startFileLoading();
+                ShareTools.get().getFile(new FileCallback(context, this, path), path);
+            }
+        }
+        else
+        {
+            play(path);
+        }
+    }
+
+    public void startFileLoading()
+    {
+        for (PlayerListener listener : listeners)
+        {
+            listener.startFileLoading();
+        }
+    }
+
+    public void fileLoadProgress(int progress)
+    {
+        notification.setProgress(progress);
+        for (PlayerListener listener : listeners)
+        {
+            listener.fileLoadProgress(progress);
+        }
+    }
+
+    public void finishFileLoading()
+    {
+        notification.cancel();
+        for (PlayerListener listener : listeners)
+        {
+            listener.finishFileLoading();
+        }
     }
 }

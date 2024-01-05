@@ -37,6 +37,8 @@ public class Main extends Activity implements AdapterView.OnItemClickListener, P
         super.onCreate(state);
         setContentView(R.layout.folder_music_player);
 
+        SysTool.get().initPermissions(this);
+
         main = UITool.get().findView(this, R.id.main);
         bar = UITool.get().findView(this, R.id.progress);
 
@@ -65,7 +67,7 @@ public class Main extends Activity implements AdapterView.OnItemClickListener, P
 
     public void initNotification(int stringId)
     {
-        notification = new NotificationProgress(this, stringId);
+        notification = NotificationProgress.get(this, stringId);
     }
 
     private void initList()
@@ -81,24 +83,15 @@ public class Main extends Activity implements AdapterView.OnItemClickListener, P
 
     private void initItemsList()
     {
-        SharedPreferences preferences = SysTool.get().getPreferences(this);
-        Set<String> files = new TreeSet<String>(preferences.getStringSet(Constants.MEDIA_FILES, Collections.<String>emptySet()));
-        adapter.addAll(files);
+        adapter.addAll(player.getFiles());
         if (adapter.getCount() == 0)
         {
             buttons.refreshFilesList();
         }
         else
         {
-            initPosition();
+            setPosition(player.getPosition(), false);
         }
-    }
-
-    private void initPosition()
-    {
-        SharedPreferences preferences = SysTool.get().getPreferences(this);
-        int position = preferences.getInt(Constants.LAST_MEDIA_FILE, 0);
-        setPosition(position, false);
     }
     
     private void setPosition(final int position, boolean smooth)
@@ -129,28 +122,13 @@ public class Main extends Activity implements AdapterView.OnItemClickListener, P
         player.setListener(this);
     }
 
-    public int getPosition(int delta)
-    {
-        int position = list.getCheckedItemPosition() + delta;
-        if (position < adapter.getCount())
-        {
-            return position;
-        }
-        return -1;
-    }
-
     public void progress(int progress)
     {
         notification.setProgress(progress);
         bar.setProgress(progress);
     }
 
-    public void setError(TaskError error)
-    {
-        UITool.get().toast(this, error);
-    }
-
-    public void finishResult()
+    public void finishFileListLiading()
     {
         notification.cancel();
         enable(true);
@@ -167,31 +145,17 @@ public class Main extends Activity implements AdapterView.OnItemClickListener, P
 
         if (countOld != countNew)
         {
-            savePosition(0);
+            player.setPosition(0);
         }
 
-        initPosition();
-        saveItemsList(result);
-    }
-
-    private void saveItemsList(Set<String> items)
-    {
-        SharedPreferences.Editor editor = SysTool.get().getPreferencesEditor(this);
-        editor.putStringSet(Constants.MEDIA_FILES, items);
-        editor.commit();
+        setPosition(player.getPosition(), false);
+        player.setFiles(result);
     }
 
     @Override
     public void onItemClick(AdapterView<?> adapterView, View view, int position, long id)
     {
-        play(position);
-    }
-
-    private void savePosition(int position)
-    {
-        SharedPreferences.Editor editor = SysTool.get().getPreferencesEditor(this);
-        editor.putInt(Constants.LAST_MEDIA_FILE, position);
-        editor.commit();
+        player.play(position);
     }
 
     @Override
@@ -201,6 +165,7 @@ public class Main extends Activity implements AdapterView.OnItemClickListener, P
         super.onBackPressed();
     }
 
+    @Override
     public void playerPlay()
     {
         runOnUiThread(
@@ -214,6 +179,7 @@ public class Main extends Activity implements AdapterView.OnItemClickListener, P
         );
     }
 
+    @Override
     public void playerPause()
     {
         runOnUiThread(
@@ -242,6 +208,7 @@ public class Main extends Activity implements AdapterView.OnItemClickListener, P
         );
     }
 
+    @Override
     public void playerProgress(final int value)
     {
         runOnUiThread(
@@ -256,61 +223,26 @@ public class Main extends Activity implements AdapterView.OnItemClickListener, P
         );
     }
 
+    @Override
+    public void setPosition(final int position)
+    {
+        runOnUiThread(
+            new Runnable()
+            {
+                public void run()
+                {
+                    setPosition(position, true);
+                }
+            }
+        );
+    }
+
     private String formatTime(int millisec)
     {
         long second = (millisec / 1000) % 60;
         long minute = (millisec / (1000 * 60)) % 60;
         long hour = (millisec / (1000 * 60 * 60)) % 24;
         return String.format("%02d:%02d:%02d", hour, minute, second);
-    }
-
-    private boolean pause()
-    {
-        if (player.isPlaying())
-        {
-            player.pause();
-            return true;
-        }
-        return false;
-    }
-
-    public void playPause()
-    {
-        if (pause())
-        {
-            return;
-        }
-        String path = adapter.getChecked(list);
-        if (ShareTools.get().isSharePath(path))
-        {
-            if (TempFiles.get().has(path))
-            {
-                setFilePath(TempFiles.get().get(path));
-            }
-            else
-            {
-                enable(false);
-                initNotification(R.string.folder_music_player_loading_files);
-                ShareTools.get().getFile(new FileCallback(this, path), path);
-            }
-        }
-        else
-        {
-            setFilePath(path);
-        }
-    }
-
-    public void setFilePath(String path)
-    {
-        player.play(path);
-    }
-
-    public void play(int position)
-    {
-        savePosition(position);
-        setPosition(position, true);
-        pause();
-        playPause();
     }
 
     @Override
@@ -329,20 +261,20 @@ public class Main extends Activity implements AdapterView.OnItemClickListener, P
     }
 
     @Override
-    public void complete()
+    public void startFileLoading()
     {
-        int position = getPosition(1);
-        if (position == -1 && adapter.getCount() > 0)
-        {
-            position = 0;
-        }
-        if (position == -1 )
-        {
-            pause();
-        }
-        else
-        {
-            play(position);
-        }
+        enable(false);
+    }
+
+    @Override
+    public void fileLoadProgress(int progress)
+    {
+        bar.setProgress(progress);
+    }
+
+    @Override
+    public void finishFileLoading()
+    {
+        enable(true);
     }
 }
