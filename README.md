@@ -1,6 +1,7 @@
 SBFolderPlayer
 
-Music player
+Music player.
+It can play local file and files from windows shared folder (SBShareFiles must be installed).
 
 - Main activity
 

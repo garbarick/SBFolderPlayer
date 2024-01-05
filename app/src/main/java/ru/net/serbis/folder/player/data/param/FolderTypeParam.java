@@ -6,9 +6,9 @@ import ru.net.serbis.folder.player.data.*;
 
 public class FolderTypeParam extends SpinnerParam<FolderType> implements AdapterView.OnItemSelectedListener
 {
-    protected Param[] params;
+    protected Param[][] params;
     
-    public FolderTypeParam(int nameId, Param[] params)
+    public FolderTypeParam(int nameId, Param[][] params)
     {
         super(nameId, FolderType.LOCAL, FolderType.class.getEnumConstants());
         this.params = params;
@@ -39,9 +39,11 @@ public class FolderTypeParam extends SpinnerParam<FolderType> implements Adapter
     {
         for (int i = 0; i < params.length; i++)
         {
-            Param param = params[i];
             int visible = i == position ? View.VISIBLE : View.GONE;
-            adapter.getView(param).setVisibility(visible);
+            for (Param param : params[i])
+            {
+                adapter.getView(param).setVisibility(visible);
+            }
         }
     }
 
