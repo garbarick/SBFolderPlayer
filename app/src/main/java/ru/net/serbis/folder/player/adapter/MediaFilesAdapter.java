@@ -24,7 +24,7 @@ public class MediaFilesAdapter extends ArrayAdapter<String>
         String path = getItem(position);
 
         TextView numView = UITool.get().findView(view, R.id.num);
-        numView.setText(getNum(position));
+        numView.setText(UITool.get().getNum(position, getCount()));
         
         TextView nameView = UITool.get().findView(view, R.id.name);
         nameView.setText(new File(path).getName());
@@ -33,12 +33,6 @@ public class MediaFilesAdapter extends ArrayAdapter<String>
         parhView.setText(path);
 
         return view;
-    }
-
-    private String getNum(int position)
-    {
-        int count = String.valueOf(getCount()).length();
-        return String.format("%0" + count + "d", position + 1);
     }
 
     public String getChecked(ListView list)

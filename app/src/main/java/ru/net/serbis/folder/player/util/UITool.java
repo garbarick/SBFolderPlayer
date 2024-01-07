@@ -176,4 +176,18 @@ public class UITool
         }
         return value;
     }
+
+    public String formatTime(int millisec)
+    {
+        long second = (millisec / 1000) % 60;
+        long minute = (millisec / (1000 * 60)) % 60;
+        long hour = (millisec / (1000 * 60 * 60)) % 24;
+        return String.format("%02d:%02d:%02d", hour, minute, second);
+    }
+
+    public String getNum(int position, int count)
+    {
+        int length = String.valueOf(count).length();
+        return String.format("%0" + length + "d", position + 1);
+    }
 }

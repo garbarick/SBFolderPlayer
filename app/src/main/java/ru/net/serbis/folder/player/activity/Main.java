@@ -13,9 +13,7 @@ import ru.net.serbis.folder.player.dialog.*;
 import ru.net.serbis.folder.player.extension.share.*;
 import ru.net.serbis.folder.player.listener.*;
 import ru.net.serbis.folder.player.notification.*;
-import ru.net.serbis.folder.player.task.*;
 import ru.net.serbis.folder.player.util.*;
-import ru.net.serbis.folder.player.view.*;
 
 public class Main extends Activity implements AdapterView.OnItemClickListener, Player.PlayerListener
 {
@@ -27,7 +25,7 @@ public class Main extends Activity implements AdapterView.OnItemClickListener, P
     private SeekBar seek;
     private TextView trackSeek;
     private TextView trackLength;
-    private ImageButtonExt playPause;
+    private ImageButton playPause;
     private Player player;
     private ButtonsListener buttons;
 
@@ -202,7 +200,7 @@ public class Main extends Activity implements AdapterView.OnItemClickListener, P
                 public void run()
                 {
                     seek.setMax(value);
-                    trackLength.setText(formatTime(value));
+                    trackLength.setText(UITool.get().formatTime(value));
                 }
             }
         );
@@ -217,7 +215,7 @@ public class Main extends Activity implements AdapterView.OnItemClickListener, P
                 public void run()
                 {
                     seek.setProgress(value);
-                    trackSeek.setText(formatTime(value));
+                    trackSeek.setText(UITool.get().formatTime(value));
                 }
             }
         );
@@ -235,14 +233,6 @@ public class Main extends Activity implements AdapterView.OnItemClickListener, P
                 }
             }
         );
-    }
-
-    private String formatTime(int millisec)
-    {
-        long second = (millisec / 1000) % 60;
-        long minute = (millisec / (1000 * 60)) % 60;
-        long hour = (millisec / (1000 * 60 * 60)) % 24;
-        return String.format("%02d:%02d:%02d", hour, minute, second);
     }
 
     @Override

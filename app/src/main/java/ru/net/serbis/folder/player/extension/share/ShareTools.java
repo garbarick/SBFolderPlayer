@@ -30,6 +30,7 @@ public class ShareTools
 
     private void sendServiceAction(int action, Map<String, String> request, Handler reply)
     {
+        UITool.get().setProgress(context, true);
         ExtConnection connection = app.getShareConnection();
         if (!connection.isBound())
         {
@@ -205,6 +206,7 @@ public class ShareTools
     public <T> void onResult(TaskCallback<T> callback, T result, TaskError error)
     {
         callback.onResult(result, error);
+        UITool.get().setProgress(context, false);
     }
 
     public boolean isSharePath(String path)

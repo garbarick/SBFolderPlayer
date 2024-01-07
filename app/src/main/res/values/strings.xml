@@ -3,6 +3,7 @@
 
     <string name="app">SBFolderPlayer</string>
     <string name="folder_music_player">Folder Music Player</string>
+    <string name="player">Player</string>
     <string name="folder_music_player_loading_files">Folder Music Player. Loading files...</string>
     <string name="settings">Settings</string>
     <string name="uncaught_exception">Uncaught exception</string>
