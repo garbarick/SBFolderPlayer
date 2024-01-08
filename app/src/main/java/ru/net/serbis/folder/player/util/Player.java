@@ -59,6 +59,11 @@ public class Player extends TimerTask implements MediaPlayer.OnErrorListener, Me
         SharedPreferences.Editor editor = SysTool.get().getPreferencesEditor(context);
         editor.putStringSet(Constants.MEDIA_FILES, files);
         editor.commit();
+
+        for (PlayerListener listener : listeners)
+        {
+            listener.setPosition(position);
+        }
     }
 
     public int getPosition()
@@ -344,6 +349,10 @@ public class Player extends TimerTask implements MediaPlayer.OnErrorListener, Me
     public void playPause()
     {
         if (pause())
+        {
+            return;
+        }
+        if (files.size() == 0)
         {
             return;
         }

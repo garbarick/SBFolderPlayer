@@ -43,13 +43,13 @@ public class BaseNotification extends Notification.Builder
         }
     }
 
-    protected void update()
+    public void update()
     {
         manager.notify(id, build());
     }
 
     public void cancel()
     {
-        manager.cancel(id);
+        manager.cancelAll();
     }
 }

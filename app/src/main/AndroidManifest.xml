@@ -28,11 +28,7 @@
             android:label="@string/uncaught_exception">
         </activity>
 
-        <receiver android:name=".receiver.PlayerReceiver" android:exported="false">
-            <intent-filter>
-                <action android:name="APP_SPECIFIC_BROADCAST"/>
-            </intent-filter>
-        </receiver>
+        <service android:name=".service.PlayerService" />
 
     </application>
 

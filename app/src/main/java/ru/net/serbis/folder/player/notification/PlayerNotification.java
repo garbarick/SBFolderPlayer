@@ -6,7 +6,7 @@ import android.os.*;
 import android.widget.*;
 import java.io.*;
 import ru.net.serbis.folder.player.*;
-import ru.net.serbis.folder.player.receiver.*;
+import ru.net.serbis.folder.player.service.*;
 import ru.net.serbis.folder.player.util.*;
 
 public class PlayerNotification extends BaseNotification implements Player.PlayerListener
@@ -82,15 +82,14 @@ public class PlayerNotification extends BaseNotification implements Player.Playe
 
     private PendingIntent getAction(String action)
     {
-        Intent intent = new Intent(context, PlayerReceiver.class);
+        Intent intent = new Intent(context, PlayerService.class);
         intent.setAction(action);
-        return PendingIntent.getBroadcast(context, 0, intent, 0);
+        return PendingIntent.getService(context, 0, intent, 0);
     }
 
     private void initPlayer()
     {
-        App app = (App) context.getApplicationContext();
-        player = app.getPlayer();
+        player = PlayerService.get().getPlayer();
         player.setListener(this);
     }
 
@@ -146,17 +145,21 @@ public class PlayerNotification extends BaseNotification implements Player.Playe
     
     private void setTrack(RemoteViews views, int position)
     {
-        views.setTextViewText(R.id.num, UITool.get().getNum(position, player.getFiles().size()));
-        String path = player.getFiles().get(position);
-        views.setTextViewText(R.id.path, path);
-        views.setTextViewText(R.id.name, getTrackName(path));
+        int count = player.getFiles().size();
+        views.setTextViewText(R.id.num, UITool.get().getNum(position, count));
+        if (count > 0)
+        {
+            String path = count > 0 ? player.getFiles().get(position) : null;
+            views.setTextViewText(R.id.path, path);
+            views.setTextViewText(R.id.name, getTrackName(path));
+        }
     }
     
     private String getTrackName(String path)
     {
         if (path == null)
         {
-            return "";
+            return null;
         }
         return new File(path).getName();
     }

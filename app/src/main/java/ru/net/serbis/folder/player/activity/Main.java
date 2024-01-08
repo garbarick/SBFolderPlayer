@@ -13,6 +13,7 @@ import ru.net.serbis.folder.player.dialog.*;
 import ru.net.serbis.folder.player.extension.share.*;
 import ru.net.serbis.folder.player.listener.*;
 import ru.net.serbis.folder.player.notification.*;
+import ru.net.serbis.folder.player.service.*;
 import ru.net.serbis.folder.player.util.*;
 
 public class Main extends Activity implements AdapterView.OnItemClickListener, Player.PlayerListener
@@ -34,9 +35,16 @@ public class Main extends Activity implements AdapterView.OnItemClickListener, P
     {
         super.onCreate(state);
         setContentView(R.layout.folder_music_player);
-
         SysTool.get().initPermissions(this);
+        App app = (App) getApplicationContext();
+        app.setMain(this);
+        Intent init = new Intent(this, PlayerService.class);
+        init.setAction(PlayerActions.INIT_MAIN);
+        startService(init);
+    }
 
+    public void init()
+    {
         main = UITool.get().findView(this, R.id.main);
         bar = UITool.get().findView(this, R.id.progress);
 
@@ -115,8 +123,7 @@ public class Main extends Activity implements AdapterView.OnItemClickListener, P
 
     private void initPlayer()
     {
-        App app = (App) getApplicationContext();
-        player = app.getPlayer();
+        player = PlayerService.get().getPlayer();
         player.setListener(this);
     }
 
@@ -159,7 +166,10 @@ public class Main extends Activity implements AdapterView.OnItemClickListener, P
     @Override
     public void onBackPressed()
     {
-        player.clearListener(this);
+        if (player != null)
+        {
+            player.clearListener(this);
+        }
         super.onBackPressed();
     }
 

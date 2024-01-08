@@ -2,20 +2,20 @@ package ru.net.serbis.folder.player;
 
 import android.app.*;
 import android.content.*;
+import ru.net.serbis.folder.player.activity.*;
 import ru.net.serbis.folder.player.connection.*;
 import ru.net.serbis.folder.player.data.*;
 import ru.net.serbis.folder.player.data.param.*;
 import ru.net.serbis.folder.player.extension.share.*;
 import ru.net.serbis.folder.player.handler.*;
-import ru.net.serbis.folder.player.notification.*;
 import ru.net.serbis.folder.player.util.*;
 
 public class App extends Application
 {
     private ExtConnection shareConnection = new ShareConnection(this);
+    private PlayerConnection playerConnection = new PlayerConnection(this);
     private boolean progress;
-    private Player player;
-    private PlayerNotification playerNotification;
+    private Main main;
 
     @Override
     public void onCreate()
@@ -25,14 +25,13 @@ public class App extends Application
         initFolderType();
         initParams();
         shareConnection.bind();
+        playerConnection.bind();
 
         Context context = getApplicationContext();
-        player = new Player(context);
         ShareTools.get().set(context);
         TempFiles.get().set(context);
-        playerNotification = new PlayerNotification(context);
 
-        Thread.setDefaultUncaughtExceptionHandler(new ExceptionHandler(getApplicationContext()));
+        //Thread.setDefaultUncaughtExceptionHandler(new ExceptionHandler(getApplicationContext()));
     }
 
     private void initFolderType()
@@ -56,8 +55,7 @@ public class App extends Application
     {
         super.onTerminate();
         shareConnection.unBind();
-        closePlayerNotification();
-        player.cancel();
+        playerConnection.unBind();
     }
 
     public ExtConnection getShareConnection()
@@ -75,14 +73,14 @@ public class App extends Application
     {
         return progress;
     }
-    
-    public Player getPlayer()
+
+    public void setMain(Main main)
     {
-        return player;
+        this.main = main;
     }
 
-    public void closePlayerNotification()
+    public void initMain()
     {
-        playerNotification.cancel();
+        main.init();
     }
 }
