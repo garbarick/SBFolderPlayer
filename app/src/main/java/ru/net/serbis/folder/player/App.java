@@ -31,7 +31,7 @@ public class App extends Application
         ShareTools.get().set(context);
         TempFiles.get().set(context);
 
-        //Thread.setDefaultUncaughtExceptionHandler(new ExceptionHandler(getApplicationContext()));
+        Thread.setDefaultUncaughtExceptionHandler(new ExceptionHandler(getApplicationContext()));
     }
 
     private void initFolderType()
