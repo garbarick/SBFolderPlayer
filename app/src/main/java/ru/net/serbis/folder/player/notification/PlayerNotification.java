@@ -6,6 +6,7 @@ import android.os.*;
 import android.widget.*;
 import java.io.*;
 import ru.net.serbis.folder.player.*;
+import ru.net.serbis.folder.player.receiver.*;
 import ru.net.serbis.folder.player.service.*;
 import ru.net.serbis.folder.player.util.*;
 
@@ -82,9 +83,9 @@ public class PlayerNotification extends BaseNotification implements Player.Playe
 
     private PendingIntent getAction(String action)
     {
-        Intent intent = new Intent(context, PlayerService.class);
+        Intent intent = new Intent(context, PlayerReceiver.class);
         intent.setAction(action);
-        return PendingIntent.getService(context, 0, intent, 0);
+        return PendingIntent.getBroadcast(context, 0, intent, 0);
     }
 
     private void initPlayer()

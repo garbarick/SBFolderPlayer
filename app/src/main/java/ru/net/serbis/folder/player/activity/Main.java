@@ -13,6 +13,7 @@ import ru.net.serbis.folder.player.dialog.*;
 import ru.net.serbis.folder.player.extension.share.*;
 import ru.net.serbis.folder.player.listener.*;
 import ru.net.serbis.folder.player.notification.*;
+import ru.net.serbis.folder.player.receiver.*;
 import ru.net.serbis.folder.player.service.*;
 import ru.net.serbis.folder.player.util.*;
 
@@ -29,22 +30,53 @@ public class Main extends Activity implements AdapterView.OnItemClickListener, P
     private ImageButton playPause;
     private Player player;
     private ButtonsListener buttons;
+    private BroadcastReceiver receiver = new BroadcastReceiver()
+    {
+        @Override
+        public void onReceive(Context context, Intent intent)
+        {
+            String action = intent.getAction();
+            switch (action)
+            {
+                case PlayerActions.READY:
+                    sendInit();
+                    break;
+                case PlayerActions.INIT_MAIN:
+                    init();
+                    break;
+            }
+        }
+    };
 
     @Override
     protected void onCreate(Bundle state)
     {
         super.onCreate(state);
-        setContentView(R.layout.folder_music_player);
         SysTool.get().initPermissions(this);
-        App app = (App) getApplicationContext();
-        app.setMain(this);
-        Intent init = new Intent(this, PlayerService.class);
-        init.setAction(PlayerActions.INIT_MAIN);
-        startService(init);
+        registerReceiver();
+        sendInit();
     }
 
-    public void init()
+    private void registerReceiver()
     {
+        IntentFilter filter = new IntentFilter();
+        filter.addAction(PlayerActions.READY);
+        filter.addAction(PlayerActions.INIT_MAIN);
+        registerReceiver(receiver, filter);
+    }
+    
+    private void sendInit()
+    {
+        Intent init = new Intent(this, PlayerReceiver.class);
+        init.setAction(PlayerActions.INIT);
+        sendBroadcast(init);
+    }
+
+    private void init()
+    {
+        unregisterReceiver(receiver);
+        setContentView(R.layout.folder_music_player);
+
         main = UITool.get().findView(this, R.id.main);
         bar = UITool.get().findView(this, R.id.progress);
 

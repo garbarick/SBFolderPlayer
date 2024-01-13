@@ -7,7 +7,6 @@ import android.view.*;
 import android.widget.*;
 import ru.net.serbis.folder.player.*;
 import ru.net.serbis.folder.player.data.*;
-import ru.net.serbis.folder.player.*;
 
 public class UITool
 {
@@ -128,6 +127,10 @@ public class UITool
 
     public void toast(Context context, TaskError error)
     {
+        if (error == null)
+        {
+            return;
+        }
         toast(context, error.getCode(), error.getMessage());
     }
     

@@ -28,7 +28,19 @@
             android:label="@string/uncaught_exception">
         </activity>
 
-        <service android:name=".service.PlayerService" />
+        <service android:name=".service.PlayerService"/>
+
+        <receiver android:name=".receiver.PlayerReceiver">
+            <intent-filter>
+                <action android:name="PLAY_PAUSE"/>
+                <action android:name="PREVIOUS"/>
+                <action android:name="NEXT"/>
+                <action android:name="SKIP_LEFT"/>
+                <action android:name="SKIP_RIGHT"/>
+                <action android:name="CLOSE"/>
+                <action android:name="INIT"/>
+            </intent-filter>
+        </receiver>
 
     </application>
 

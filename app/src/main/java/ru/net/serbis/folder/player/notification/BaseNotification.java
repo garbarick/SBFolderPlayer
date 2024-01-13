@@ -28,6 +28,7 @@ public class BaseNotification extends Notification.Builder
     {
         setSmallIcon(R.drawable.app);
         setOngoing(true);
+        setAutoCancel(true);
         manager = SysTool.get().getService(context, Context.NOTIFICATION_SERVICE);
         initChannel();
     }
@@ -50,6 +51,6 @@ public class BaseNotification extends Notification.Builder
 
     public void cancel()
     {
-        manager.cancelAll();
+        manager.cancel(id);
     }
 }

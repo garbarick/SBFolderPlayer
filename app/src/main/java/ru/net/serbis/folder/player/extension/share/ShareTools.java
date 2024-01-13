@@ -1,6 +1,5 @@
 package ru.net.serbis.folder.player.extension.share;
 
-import android.content.*;
 import android.os.*;
 import android.text.*;
 import java.io.*;
@@ -8,50 +7,23 @@ import java.util.*;
 import ru.net.serbis.folder.player.*;
 import ru.net.serbis.folder.player.connection.*;
 import ru.net.serbis.folder.player.data.*;
+import ru.net.serbis.folder.player.service.*;
 import ru.net.serbis.folder.player.task.*;
 import ru.net.serbis.folder.player.util.*;
 
-public class ShareTools
+public class ShareTools extends ServiceTools
 {
     private final static ShareTools instance = new ShareTools();
-    private Context context;
-    private App app;
 
     public static ShareTools get()
     {
         return instance;
     }
 
-    public void set(Context context)
+    @Override
+    protected ExtConnection getConnection()
     {
-        this.context = context;
-        app = (App) context.getApplicationContext();
-    }
-
-    private void sendServiceAction(int action, Map<String, String> request, Handler reply)
-    {
-        UITool.get().setProgress(context, true);
-        ExtConnection connection = app.getShareConnection();
-        if (!connection.isBound())
-        {
-            return;
-        }
-        Message msg = Message.obtain(null, action, 0, 0);
-        Bundle data = new Bundle();
-        for (Map.Entry<String, String> entry : request.entrySet())
-        {
-            data.putString(entry.getKey(), entry.getValue());
-        }
-        msg.setData(data);
-        msg.replyTo = new Messenger(reply);
-        try
-        {
-            connection.getService().send(msg);
-        }
-        catch (RemoteException e)
-        {
-            Log.error(this, e);
-        }
+        return app.getShareConnection();
     }
 
     public void uploadFile(final TaskCallback<Boolean> callback, String filePath, String shareDir, Integer bufferSize)
@@ -80,11 +52,9 @@ public class ShareTools
                         Share.SUCCESS.equals(msg.getData().getString(Share.RESULT)))
                     {
                         onResult(callback, true, null);
+                        return;
                     }
-                    else
-                    {
-                        checkMessage(callback, msg);
-                    }
+                    checkMessage(callback, msg);
                 }
             }
         );
@@ -129,11 +99,9 @@ public class ShareTools
                     if (msg.getData().containsKey(Share.FILES_LIST))
                     {
                         onResult(callback, IOTool.get().findFiles(msg.getData().getString(Share.FILES_LIST)), null);
+                        return;
                     }
-                    else
-                    {
-                        checkMessage(callback, msg);
-                    }
+                    checkMessage(callback, msg);
                 }
             }
         );
@@ -159,14 +127,11 @@ public class ShareTools
                 @Override
                 public void handleMessage(Message msg)
                 {
-                    if (msg.getData().containsKey(Share.FILE))
+                    if (checkResult(callback, msg, Share.FILE))
                     {
-                        onResult(callback, msg.getData().getString(Share.FILE), null);
+                        return;
                     }
-                    else
-                    {
-                        checkMessage(callback, msg);
-                    }
+                    checkMessage(callback, msg);
                 }
             }
         );
@@ -181,32 +146,17 @@ public class ShareTools
         }
         return null;
     }
-    
+
     private <T> void checkMessage(TaskCallback<T> callback, Message msg)
     {
-        if (msg.getData().containsKey(Share.ERROR) &&
-            msg.getData().containsKey(Share.ERROR_CODE))
+        if (checkError(callback, msg, Share.ERROR, Share.ERROR_CODE))
         {
-            int errorCode = msg.getData().getInt(Share.ERROR_CODE);
-            String error = msg.getData().getString(Share.ERROR);
-            onResult(callback, null, new TaskError(errorCode, error));
+            return;
         }
-        else if (msg.getData().containsKey(Share.PROGRESS))
+        if (checkProgress(callback, msg, Share.PROGRESS))
         {
-            int progress = msg.getData().getInt(Share.PROGRESS);
-            progress(callback, progress);
+            return;
         }
-    }
-
-    public <T> void progress(TaskCallback<T> callback, int progress)
-    {
-        callback.progress(progress);
-    }
-
-    public <T> void onResult(TaskCallback<T> callback, T result, TaskError error)
-    {
-        callback.onResult(result, error);
-        UITool.get().setProgress(context, false);
     }
 
     public boolean isSharePath(String path)

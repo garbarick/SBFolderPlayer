@@ -24,7 +24,7 @@ public class Player extends TimerTask implements MediaPlayer.OnErrorListener, Me
         void finishFileLoading();
     }
 
-    private List<PlayerListener> listeners = new ArrayList<PlayerListener>();
+    private List<PlayerListener> listeners = Collections.synchronizedList(new ArrayList<PlayerListener>());
     private MediaPlayer player;
     private String lastPath = "";
     private Timer timer = new Timer();
@@ -236,9 +236,17 @@ public class Player extends TimerTask implements MediaPlayer.OnErrorListener, Me
         {
             return;
         }
-        for (PlayerListener listener : listeners)
+        try
         {
-            listener.playerDuration(player.getDuration());
+            int duration = player.getDuration();
+            for (PlayerListener listener : listeners)
+            {
+                listener.playerDuration(duration);
+            }
+        }
+        catch (Exception e)
+        {
+            Log.error(this, e);
         }
     }
 
@@ -248,9 +256,17 @@ public class Player extends TimerTask implements MediaPlayer.OnErrorListener, Me
         {
             return;
         }
-        for (PlayerListener listener : listeners)
+        try
         {
-            listener.playerProgress(player.getCurrentPosition());
+            int position = player.getCurrentPosition();
+            for (PlayerListener listener : listeners)
+            {
+                listener.playerProgress(position);
+            }
+        }
+        catch (Exception e)
+        {
+            Log.error(this, e);
         }
     }
 

@@ -2,12 +2,13 @@ package ru.net.serbis.folder.player;
 
 import android.app.*;
 import android.content.*;
-import ru.net.serbis.folder.player.activity.*;
 import ru.net.serbis.folder.player.connection.*;
 import ru.net.serbis.folder.player.data.*;
 import ru.net.serbis.folder.player.data.param.*;
 import ru.net.serbis.folder.player.extension.share.*;
 import ru.net.serbis.folder.player.handler.*;
+import ru.net.serbis.folder.player.notification.*;
+import ru.net.serbis.folder.player.service.*;
 import ru.net.serbis.folder.player.util.*;
 
 public class App extends Application
@@ -15,7 +16,6 @@ public class App extends Application
     private ExtConnection shareConnection = new ShareConnection(this);
     private PlayerConnection playerConnection = new PlayerConnection(this);
     private boolean progress;
-    private Main main;
 
     @Override
     public void onCreate()
@@ -30,6 +30,7 @@ public class App extends Application
         Context context = getApplicationContext();
         ShareTools.get().set(context);
         TempFiles.get().set(context);
+        PlayerTools.get().set(context);
 
         Thread.setDefaultUncaughtExceptionHandler(new ExceptionHandler(getApplicationContext()));
     }
@@ -64,6 +65,12 @@ public class App extends Application
         return shareConnection;
 	}
 
+    public PlayerConnection getPlayerConnection()
+    {
+        playerConnection.bind();
+        return playerConnection;
+	}
+
     public void setProgress(boolean progress)
     {
         this.progress = progress;
@@ -72,15 +79,5 @@ public class App extends Application
     public boolean isProgress()
     {
         return progress;
-    }
-
-    public void setMain(Main main)
-    {
-        this.main = main;
-    }
-
-    public void initMain()
-    {
-        main.init();
     }
 }
