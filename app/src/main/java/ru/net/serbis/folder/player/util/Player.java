@@ -456,7 +456,7 @@ public class Player extends Util implements MediaPlayer.OnErrorListener, MediaPl
             }
             else
             {
-                notification = NotificationProgress.get(context, R.string.folder_music_player_loading_files);
+                notification = NotificationProgress.get(context, R.string.loading_files);
                 startFileLoading();
                 ShareTools.get().getFile(new FileCallback(context, this, path), path);
             }

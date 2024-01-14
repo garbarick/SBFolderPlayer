@@ -11,17 +11,26 @@ public class BaseNotification extends Notification.Builder
 {
     protected int id = new Random(new Date().getTime()).nextInt();
     protected Context context;
-    protected int channelStringId;
+    protected int channelId;
     protected NotificationManager manager;
+    protected boolean old;
+    protected int textId;
 
-    public BaseNotification(Context context, int channelStringId)
+    public BaseNotification(Context context, int channelId, int textId)
     {
         super(context);
 
         this.context = context;
-        this.channelStringId = channelStringId;
+        this.channelId = channelId;
+        this.textId = textId;
+        old = Build.VERSION.SDK_INT < Build.VERSION_CODES.N;
 
         init();
+    }
+
+    public BaseNotification(Context context, int channelId)
+    {
+        this(context, channelId, channelId);
     }
 
     protected void init()
@@ -37,7 +46,7 @@ public class BaseNotification extends Notification.Builder
     {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
         {
-            String channelId = context.getResources().getString(channelStringId);
+            String channelId = context.getResources().getString(this.channelId);
             setChannelId(channelId);
             NotificationChannel channel = new NotificationChannel(channelId, channelId, NotificationManager.IMPORTANCE_LOW);
             manager.createNotificationChannel(channel);

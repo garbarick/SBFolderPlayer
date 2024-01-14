@@ -77,7 +77,7 @@ public class ButtonsListener implements View.OnClickListener
     {
         String dir = Params.MUSIC_LOCAL_FOLDER.getValue(activity);
         activity.enable(false);
-        activity.initNotification(R.string.folder_music_player_loading_files);
+        activity.initNotification(R.string.loading_files);
         new FileListLoaderTask(activity, new FilesListCallback(activity)).execute(dir);
     }
 
@@ -85,7 +85,7 @@ public class ButtonsListener implements View.OnClickListener
     {
         String dir = Params.MUSIC_SHARE_FOLDER.getValue(activity);
         activity.enable(false);
-        activity.initNotification(R.string.folder_music_player_loading_files);
+        activity.initNotification(R.string.loading_files);
         ShareTools.get().getFileList(new FilesListCallback(activity), dir);
     }
 }

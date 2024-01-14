@@ -16,7 +16,6 @@ public class PlayerNotification extends BaseNotification implements Player.Playe
     private RemoteViews bigViews;
     private int progress;
     private int duration;
-    private boolean old;
 
     public PlayerNotification(Context context)
     {
@@ -28,7 +27,7 @@ public class PlayerNotification extends BaseNotification implements Player.Playe
     protected void init()
     {
         super.init();
-        old = Build.VERSION.SDK_INT < Build.VERSION_CODES.N;
+
         views = new RemoteViews(context.getPackageName(), R.layout.notification_player);
         bigViews = new RemoteViews(context.getPackageName(), R.layout.notification_big_player);
         
