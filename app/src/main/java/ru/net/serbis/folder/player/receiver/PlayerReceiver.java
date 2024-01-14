@@ -1,5 +1,6 @@
 package ru.net.serbis.folder.player.receiver;
 
+import android.app.*;
 import android.content.*;
 import ru.net.serbis.folder.player.data.*;
 import ru.net.serbis.folder.player.service.*;
@@ -51,5 +52,22 @@ public class PlayerReceiver extends BroadcastReceiver implements TaskCallback<Bo
     public void onResult(Boolean result, TaskError error)
     {
         UITool.get().toast(context, error);
+    }
+
+    public static void sendAction(Context context, String action)
+    {
+        context.sendBroadcast(getIntent(context, action));
+    }
+
+    public static Intent getIntent(Context context, String action)
+    {
+        Intent intent = new Intent(context, PlayerReceiver.class);
+        intent.setAction(action);
+        return intent;
+    }
+
+    public static PendingIntent getPending(Context context, String action)
+    {
+        return PendingIntent.getBroadcast(context, 0, getIntent(context, action), 0);
     }
 }

@@ -6,6 +6,8 @@ import ru.net.serbis.folder.player.activity.*;
 import ru.net.serbis.folder.player.data.*;
 import ru.net.serbis.folder.player.dialog.*;
 import ru.net.serbis.folder.player.extension.share.*;
+import ru.net.serbis.folder.player.receiver.*;
+import ru.net.serbis.folder.player.service.*;
 import ru.net.serbis.folder.player.task.*;
 import ru.net.serbis.folder.player.util.*;
 
@@ -37,19 +39,19 @@ public class ButtonsListener implements View.OnClickListener
                 refreshFilesList();
                 break;
             case R.id.previous:
-                previousFile();
+                PlayerReceiver.sendAction(activity, PlayerActions.PREVIOUS);
                 break;
             case R.id.skip_left:
-                skipLeft();
+                PlayerReceiver.sendAction(activity, PlayerActions.SKIP_LEFT);
                 break;
             case R.id.play_pause:
-                activity.getPlayer().playPause();
+                PlayerReceiver.sendAction(activity, PlayerActions.PLAY_PAUSE);
                 break;
             case R.id.skip_right:
-                skipRight();
+                PlayerReceiver.sendAction(activity, PlayerActions.SKIP_RIGHT);
                 break;
             case R.id.next:
-                nextFile();
+                PlayerReceiver.sendAction(activity, PlayerActions.NEXT);
                 break;
         }
     }
@@ -85,25 +87,5 @@ public class ButtonsListener implements View.OnClickListener
         activity.enable(false);
         activity.initNotification(R.string.folder_music_player_loading_files);
         ShareTools.get().getFileList(new FilesListCallback(activity), dir);
-    }
-
-    private void previousFile()
-    {
-        activity.getPlayer().playPrevious();
-    }
-
-    private void skipLeft()
-    {
-        activity.getPlayer().skipLeft();
-    }
-
-    private void skipRight()
-    {
-        activity.getPlayer().skipRight();
-    }
-
-    private void nextFile()
-    {
-        activity.getPlayer().playNext();
     }
 }

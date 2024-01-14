@@ -1,25 +1,14 @@
 package ru.net.serbis.folder.player.service;
 
-import android.content.*;
 import android.os.*;
 import java.util.*;
-import ru.net.serbis.folder.player.*;
 import ru.net.serbis.folder.player.connection.*;
 import ru.net.serbis.folder.player.data.*;
 import ru.net.serbis.folder.player.task.*;
 import ru.net.serbis.folder.player.util.*;
 
-public abstract class ServiceTools
+public abstract class ServiceTools extends Util
 {
-    protected Context context;
-    protected App app;
-
-    public void set(Context context)
-    {
-        this.context = context;
-        app = (App) context.getApplicationContext();
-    }
-
     protected void sendServiceAction(int action, Handler reply)
     {
         sendServiceAction(action, new HashMap<String, String>(), reply);

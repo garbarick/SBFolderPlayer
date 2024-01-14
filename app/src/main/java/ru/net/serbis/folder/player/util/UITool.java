@@ -109,7 +109,7 @@ public class UITool
 
     public void toast(final Context context, final String text)
     {
-        new Handler(Looper.getMainLooper()).post(
+        runOnUiThread(
             new Runnable()
             {
                 public void run()
@@ -190,7 +190,16 @@ public class UITool
 
     public String getNum(int position, int count)
     {
+        if (count == 0)
+        {
+            return "";
+        }
         int length = String.valueOf(count).length();
         return String.format("%0" + length + "d", position + 1);
+    }
+
+    public void runOnUiThread(Runnable run)
+    {
+        new Handler(Looper.getMainLooper()).post(run);
     }
 }

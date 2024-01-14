@@ -12,7 +12,6 @@ import ru.net.serbis.folder.player.util.*;
 
 public class PlayerNotification extends BaseNotification implements Player.PlayerListener
 {
-    private Player player;
     private RemoteViews views;
     private RemoteViews bigViews;
     private int progress;
@@ -36,9 +35,9 @@ public class PlayerNotification extends BaseNotification implements Player.Playe
         setHeader();
         setButtons();
 
-        initPlayer();
-        setTrack(views, player.getPosition());
-        setTrack(bigViews, player.getPosition());
+        Player.get().setListener(this);
+        setTrack(views, Player.get().getPosition());
+        setTrack(bigViews, Player.get().getPosition());
         setPriority(Notification.PRIORITY_MAX);
     }
 
@@ -78,20 +77,7 @@ public class PlayerNotification extends BaseNotification implements Player.Playe
 
     private void setAction(RemoteViews views, int buttonId, String action)
     {
-        views.setOnClickPendingIntent(buttonId, getAction(action));
-    }
-
-    private PendingIntent getAction(String action)
-    {
-        Intent intent = new Intent(context, PlayerReceiver.class);
-        intent.setAction(action);
-        return PendingIntent.getBroadcast(context, 0, intent, 0);
-    }
-
-    private void initPlayer()
-    {
-        player = PlayerService.get().getPlayer();
-        player.setListener(this);
+        views.setOnClickPendingIntent(buttonId, PlayerReceiver.getPending(context, action));
     }
 
     @Override
@@ -146,11 +132,11 @@ public class PlayerNotification extends BaseNotification implements Player.Playe
     
     private void setTrack(RemoteViews views, int position)
     {
-        int count = player.getFiles().size();
+        int count = Player.get().getFiles().size();
         views.setTextViewText(R.id.num, UITool.get().getNum(position, count));
         if (count > 0)
         {
-            String path = count > 0 ? player.getFiles().get(position) : null;
+            String path = count > 0 ? Player.get().getFiles().get(position) : null;
             views.setTextViewText(R.id.path, path);
             views.setTextViewText(R.id.name, getTrackName(path));
         }
@@ -194,7 +180,7 @@ public class PlayerNotification extends BaseNotification implements Player.Playe
     @Override
     public void cancel()
     {
-        player.clearListener(this);
+        Player.get().clearListener(this);
         super.cancel();
     }
 }

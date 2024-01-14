@@ -19,19 +19,19 @@ public class PlayerService extends Service
                 switch (msg.what)
                 {
                     case PlayerActions.ACTION_PLAY_PAUSE:
-                        player.playPause();
+                        Player.get().playPause();
                         break;
                     case PlayerActions.ACTION_PREVIOUS:
-                        player.playPrevious();
+                        Player.get().playPrevious();
                         break;
                     case PlayerActions.ACTION_NEXT:
-                        player.playNext();
+                        Player.get().playNext();
                         break;
                     case PlayerActions.ACTION_SKIP_LEFT:
-                        player.skipLeft();
+                        Player.get().skipLeft();
                         break;
                     case PlayerActions.ACTION_SKIP_RIGHT:
-                        player.skipRight();
+                        Player.get().skipRight();
                         break;
                     case PlayerActions.ACTION_CLOSE:
                         playerNotification.cancel();
@@ -61,7 +61,6 @@ public class PlayerService extends Service
 
     private Messenger messenger;
     private Context context;
-    private Player player;
     private PlayerNotification playerNotification;
 
     public static PlayerService get()
@@ -75,11 +74,6 @@ public class PlayerService extends Service
         return messenger.getBinder();
     }
 
-    public Player getPlayer()
-    {
-        return player;
-    }
-
     @Override
     public void onCreate()
     {
@@ -87,7 +81,6 @@ public class PlayerService extends Service
         instance = this;
         messenger = new Messenger(new IncomingHandler());
         context = getApplicationContext();
-        player = new Player(context);
         sendBroadcast(new Intent(PlayerActions.READY));
     }
 
@@ -116,7 +109,7 @@ public class PlayerService extends Service
     public void onDestroy()
     {
         cancelNotifications();
-        player.cancel();
+        Player.get().cancel();
     }
 
     private void sendResult(Bundle data)

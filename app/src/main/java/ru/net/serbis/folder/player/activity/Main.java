@@ -2,6 +2,7 @@ package ru.net.serbis.folder.player.activity;
 
 import android.app.*;
 import android.content.*;
+import android.content.res.*;
 import android.os.*;
 import android.view.*;
 import android.widget.*;
@@ -28,7 +29,6 @@ public class Main extends Activity implements AdapterView.OnItemClickListener, P
     private TextView trackSeek;
     private TextView trackLength;
     private ImageButton playPause;
-    private Player player;
     private ButtonsListener buttons;
     private BroadcastReceiver receiver = new BroadcastReceiver()
     {
@@ -39,7 +39,7 @@ public class Main extends Activity implements AdapterView.OnItemClickListener, P
             switch (action)
             {
                 case PlayerActions.READY:
-                    sendInit();
+                    PlayerReceiver.sendAction(Main.this, PlayerActions.INIT);
                     break;
                 case PlayerActions.INIT_MAIN:
                     init();
@@ -54,7 +54,7 @@ public class Main extends Activity implements AdapterView.OnItemClickListener, P
         super.onCreate(state);
         SysTool.get().initPermissions(this);
         registerReceiver();
-        sendInit();
+        PlayerReceiver.sendAction(this, PlayerActions.INIT);
     }
 
     private void registerReceiver()
@@ -64,38 +64,35 @@ public class Main extends Activity implements AdapterView.OnItemClickListener, P
         filter.addAction(PlayerActions.INIT_MAIN);
         registerReceiver(receiver, filter);
     }
-    
-    private void sendInit()
-    {
-        Intent init = new Intent(this, PlayerReceiver.class);
-        init.setAction(PlayerActions.INIT);
-        sendBroadcast(init);
-    }
 
     private void init()
     {
         unregisterReceiver(receiver);
-        setContentView(R.layout.folder_music_player);
+        setContentView(getLayout());
 
         main = UITool.get().findView(this, R.id.main);
         bar = UITool.get().findView(this, R.id.progress);
 
         seek = UITool.get().findView(this, R.id.seek);
-        seek.setOnSeekBarChangeListener(new SeekBarListener(this));
+        seek.setOnSeekBarChangeListener(new SeekBarListener());
 
         trackSeek = UITool.get().findView(this, R.id.track_seek);
         trackLength = UITool.get().findView(this, R.id.track_lenght);
 
         playPause = UITool.get().findView(this, R.id.play_pause);
 
-        initPlayer();
+        Player.get().setListener(this);
         buttons = new ButtonsListener(this);
         initList();
     }
 
-    public Player getPlayer()
+    private int getLayout()
     {
-        return player;
+        if (Configuration.ORIENTATION_LANDSCAPE == getResources().getConfiguration().orientation)
+        {
+            return R.layout.main_landscape;
+        }
+        return R.layout.main_portrait;
     }
 
     public void enable(boolean enable)
@@ -121,14 +118,14 @@ public class Main extends Activity implements AdapterView.OnItemClickListener, P
 
     private void initItemsList()
     {
-        adapter.addAll(player.getFiles());
+        adapter.addAll(Player.get().getFiles());
         if (adapter.getCount() == 0)
         {
             buttons.refreshFilesList();
         }
         else
         {
-            setPosition(player.getPosition(), false);
+            setPosition(Player.get().getPosition(), false);
         }
     }
     
@@ -151,12 +148,6 @@ public class Main extends Activity implements AdapterView.OnItemClickListener, P
                 }
             );
         }
-    }
-
-    private void initPlayer()
-    {
-        player = PlayerService.get().getPlayer();
-        player.setListener(this);
     }
 
     public void progress(int progress)
@@ -182,99 +173,63 @@ public class Main extends Activity implements AdapterView.OnItemClickListener, P
 
         if (countOld != countNew)
         {
-            player.setPosition(0);
+            Player.get().setPosition(0);
         }
 
-        setPosition(player.getPosition(), false);
-        player.setFiles(result);
+        setPosition(Player.get().getPosition(), false);
+        Player.get().setFiles(result);
     }
 
     @Override
     public void onItemClick(AdapterView<?> adapterView, View view, int position, long id)
     {
-        player.play(position);
+        Player.get().play(position);
     }
 
     @Override
     public void onBackPressed()
     {
-        if (player != null)
-        {
-            player.clearListener(this);
-        }
+        Player.get().clearListener(this);
         super.onBackPressed();
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle state)
+    {
+        Player.get().clearListener(this);
+        super.onSaveInstanceState(state);
     }
 
     @Override
     public void playerPlay()
     {
-        runOnUiThread(
-            new Runnable()
-            {
-                public void run()
-                {
-                    playPause.setImageResource(android.R.drawable.ic_media_pause);
-                }
-            }
-        );
+        playPause.setImageResource(android.R.drawable.ic_media_pause);
     }
 
     @Override
     public void playerPause()
     {
-        runOnUiThread(
-            new Runnable()
-            {
-                public void run()
-                {
-                    playPause.setImageResource(android.R.drawable.ic_media_play);
-                }
-            }
-        );
+        playPause.setImageResource(android.R.drawable.ic_media_play);
     }
 
     @Override
-    public void playerDuration(final int value)
+    public void playerDuration(int value)
     {
-        runOnUiThread(
-            new Runnable()
-            {
-                public void run()
-                {
-                    seek.setMax(value);
-                    trackLength.setText(UITool.get().formatTime(value));
-                }
-            }
-        );
+        seek.setMax(value);
+        trackLength.setText(UITool.get().formatTime(value));
     }
 
     @Override
-    public void playerProgress(final int value)
+    public void playerProgress(int value)
     {
-        runOnUiThread(
-            new Runnable()
-            {
-                public void run()
-                {
-                    seek.setProgress(value);
-                    trackSeek.setText(UITool.get().formatTime(value));
-                }
-            }
-        );
+        seek.setProgress(value);
+        trackSeek.setText(UITool.get().formatTime(value));
     }
 
     @Override
-    public void setPosition(final int position)
+    public void setPosition(int position)
     {
-        runOnUiThread(
-            new Runnable()
-            {
-                public void run()
-                {
-                    setPosition(position, true);
-                }
-            }
-        );
+        setPosition(position, true);
     }
 
     @Override

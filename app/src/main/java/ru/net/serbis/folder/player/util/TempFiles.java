@@ -5,11 +5,10 @@ import java.io.*;
 import java.util.*;
 import ru.net.serbis.folder.player.data.*;
 
-public class TempFiles
+public class TempFiles extends Util
 {
     private static final TempFiles instance = new TempFiles();
 
-    private Context context;
     private Map<String, String> files;
 
     public static TempFiles get()
@@ -17,9 +16,10 @@ public class TempFiles
         return instance;
     }
 
+    @Override
     public void set(Context context)
     {
-        this.context = context;
+        super.set(context);
         SharedPreferences preferences = SysTool.get().getPreferences(context);
         String data = preferences.getString(Constants.TEMP_FILES, "[]");
         files = new JsonTools().parseMap(data);

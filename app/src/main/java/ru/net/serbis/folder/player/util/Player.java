@@ -9,8 +9,10 @@ import ru.net.serbis.folder.player.extension.share.*;
 import ru.net.serbis.folder.player.notification.*;
 import ru.net.serbis.folder.player.task.*;
 
-public class Player extends TimerTask implements MediaPlayer.OnErrorListener, MediaPlayer.OnCompletionListener
+public class Player extends Util implements MediaPlayer.OnErrorListener, MediaPlayer.OnCompletionListener
 {
+    private static final Player instance = new Player();
+
     public interface PlayerListener
     {
         void playerProgress(int currentPosition);
@@ -26,18 +28,22 @@ public class Player extends TimerTask implements MediaPlayer.OnErrorListener, Me
 
     private List<PlayerListener> listeners = Collections.synchronizedList(new ArrayList<PlayerListener>());
     private MediaPlayer player;
-    private String lastPath = "";
-    private Timer timer = new Timer();
-    private Context context;
-    private List<String> files = new ArrayList<String>();
+    private String lastPath;
+    private Timer timer;
+    private List<String> files = Collections.synchronizedList(new ArrayList<String>());
     private int position;
     private NotificationProgress notification;
 
-    public Player(Context context)
+    public static Player get()
     {
-        this.context = context;
+        return instance;
+    }
+
+    @Override
+    public void set(Context context)
+    {
+        super.set(context);
         init();
-        timer.schedule(this, 0, 1000);
     }
 
     private void init()
@@ -56,21 +62,34 @@ public class Player extends TimerTask implements MediaPlayer.OnErrorListener, Me
     {
         this.files.clear();
         this.files.addAll(files);
+        saveFiles(files);
+        UITool.get().runOnUiThread(
+            new Runnable()
+            {
+                @Override
+                public void run()
+                {
+                    for (PlayerListener listener : listeners)
+                    {
+                        listener.setPosition(position);
+                    }
+                }
+            }
+        );
+    }
+
+    private void saveFiles(Set<String> files)
+    {
         SharedPreferences.Editor editor = SysTool.get().getPreferencesEditor(context);
         editor.putStringSet(Constants.MEDIA_FILES, files);
         editor.commit();
-
-        for (PlayerListener listener : listeners)
-        {
-            listener.setPosition(position);
-        }
     }
 
     public int getPosition()
     {
         return position;
     }
-    
+
     public int getPosition(int delta)
     {
         int position = this.position + delta;
@@ -81,22 +100,37 @@ public class Player extends TimerTask implements MediaPlayer.OnErrorListener, Me
         return -1;
     }
 
-    public void setPosition(int position)
+    public void setPosition(final int position)
     {
         this.position = position;
+        savePisition(position);
+        UITool.get().runOnUiThread(
+            new Runnable()
+            {
+                @Override
+                public void run()
+                {
+                    for (PlayerListener listener : listeners)
+                    {
+                        listener.setPosition(position);
+                    }
+                }
+            }
+        );
+    }
+
+    private void savePisition(int position)
+    {
         SharedPreferences.Editor editor = SysTool.get().getPreferencesEditor(context);
         editor.putInt(Constants.LAST_MEDIA_FILE, position);
         editor.commit();
-
-        for (PlayerListener listener : listeners)
-        {
-            listener.setPosition(position);
-        }
     }
 
     public void setListener(PlayerListener listener)
     {
-        this.listeners.add(listener);
+        listeners.add(listener);
+        stopTimer();
+        startTimer();
         if (player == null)
         {
             return;
@@ -116,6 +150,12 @@ public class Player extends TimerTask implements MediaPlayer.OnErrorListener, Me
     public void clearListener(PlayerListener listener)
     {
         listeners.remove(listener);
+        stopTimer();
+        if (listeners.isEmpty())
+        {
+            return;
+        }
+        startTimer();
     }
 
     public boolean pause()
@@ -131,7 +171,7 @@ public class Player extends TimerTask implements MediaPlayer.OnErrorListener, Me
 
     public void play(String path)
     {
-        if (!lastPath.equals(path))
+        if (lastPath == null || !lastPath.equals(path))
         {
             stop();
             if (path == null)
@@ -152,7 +192,6 @@ public class Player extends TimerTask implements MediaPlayer.OnErrorListener, Me
         {
             return;
         }
-        
         player.start();
         playerPlay();
         playerDuration();
@@ -180,7 +219,7 @@ public class Player extends TimerTask implements MediaPlayer.OnErrorListener, Me
         player.stop();
         player.release();
         player = null;
-        lastPath = "";
+        lastPath = null;
         playerPause();
     }
 
@@ -200,22 +239,25 @@ public class Player extends TimerTask implements MediaPlayer.OnErrorListener, Me
         return false;
     }
 
-    @Override
-    public void run()
-    {
-        playerProgress();
-    }
-
     private void playerPause()
     {
         if (player == null)
         {
             return;
         }
-        for (PlayerListener listener : listeners)
-        {
-            listener.playerPause();
-        }
+        UITool.get().runOnUiThread(
+            new Runnable()
+            {
+                @Override
+                public void run()
+                {
+                    for (PlayerListener listener : listeners)
+                    {
+                        listener.playerPause();
+                    }
+                }
+            }
+        );
     }
 
     private void playerPlay()
@@ -224,12 +266,21 @@ public class Player extends TimerTask implements MediaPlayer.OnErrorListener, Me
         {
             return;
         }
-        for (PlayerListener listener : listeners)
-        {
-            listener.playerPlay();
-        }
+        UITool.get().runOnUiThread(
+            new Runnable()
+            {
+                @Override
+                public void run()
+                {
+                    for (PlayerListener listener : listeners)
+                    {
+                        listener.playerPlay();
+                    }
+                }
+            }
+        );
     }
-    
+
     private void playerDuration()
     {
         if (player == null)
@@ -239,15 +290,29 @@ public class Player extends TimerTask implements MediaPlayer.OnErrorListener, Me
         try
         {
             int duration = player.getDuration();
-            for (PlayerListener listener : listeners)
-            {
-                listener.playerDuration(duration);
-            }
+            playerDuration(duration);
         }
         catch (Exception e)
         {
             Log.error(this, e);
         }
+    }
+
+    private void playerDuration(final int duration)
+    {
+        UITool.get().runOnUiThread(
+            new Runnable()
+            {
+                @Override
+                public void run()
+                {
+                    for (PlayerListener listener : listeners)
+                    {
+                        listener.playerDuration(duration);
+                    }
+                }
+            }
+        );
     }
 
     private void playerProgress()
@@ -259,10 +324,7 @@ public class Player extends TimerTask implements MediaPlayer.OnErrorListener, Me
         try
         {
             int position = player.getCurrentPosition();
-            for (PlayerListener listener : listeners)
-            {
-                listener.playerProgress(position);
-            }
+            playerProgress(position);
         }
         catch (Exception e)
         {
@@ -270,27 +332,40 @@ public class Player extends TimerTask implements MediaPlayer.OnErrorListener, Me
         }
     }
 
-    @Override
-    public boolean cancel()
+    private void playerProgress(final int position)
+    {
+        UITool.get().runOnUiThread(
+            new Runnable()
+            {
+                @Override
+                public void run()
+                {
+                    for (PlayerListener listener : listeners)
+                    {
+                        listener.playerProgress(position);
+                    }
+                }
+            }
+        );
+    }
+
+    public void cancel()
     {
         timer.cancel();
-        timer.purge();
         listeners.clear();
         stop();
-        return super.cancel();
     }
 
     @Override
     public void onCompletion(MediaPlayer player)
     {
         playerPause();
-
         int position = getPosition(1);
         if (position == -1 && files.size() > 0)
         {
             position = 0;
         }
-        if (position == -1 )
+        if (position == -1)
         {
             pause();
         }
@@ -354,14 +429,14 @@ public class Player extends TimerTask implements MediaPlayer.OnErrorListener, Me
             play(position);
         }
     }
-    
+
     public void play(int position)
     {
         setPosition(position);
         pause();
         playPause();
     }
-    
+
     public void playPause()
     {
         if (pause())
@@ -394,27 +469,80 @@ public class Player extends TimerTask implements MediaPlayer.OnErrorListener, Me
 
     public void startFileLoading()
     {
-        for (PlayerListener listener : listeners)
-        {
-            listener.startFileLoading();
-        }
+        UITool.get().runOnUiThread(
+            new Runnable()
+            {
+                @Override
+                public void run()
+                {
+                    for (PlayerListener listener : listeners)
+                    {
+                        listener.startFileLoading();
+                    }
+                }
+            }
+        );
     }
 
-    public void fileLoadProgress(int progress)
+    public void fileLoadProgress(final int progress)
     {
-        notification.setProgress(progress);
-        for (PlayerListener listener : listeners)
-        {
-            listener.fileLoadProgress(progress);
-        }
+        UITool.get().runOnUiThread(
+            new Runnable()
+            {
+                @Override
+                public void run()
+                {
+                    notification.setProgress(progress);
+                    for (PlayerListener listener : listeners)
+                    {
+                        listener.fileLoadProgress(progress);
+                    }
+                }
+            }
+        );
     }
 
     public void finishFileLoading()
     {
-        notification.cancel();
-        for (PlayerListener listener : listeners)
+        UITool.get().runOnUiThread(
+            new Runnable()
+            {
+                @Override
+                public void run()
+                {
+                    notification.cancel();
+                    for (PlayerListener listener : listeners)
+                    {
+                        listener.finishFileLoading();
+                    }
+                }
+            }
+        );
+    }
+
+    synchronized
+    private void startTimer()
+    {
+        timer = new Timer();
+        timer.schedule(
+            new TimerTask()
+            {
+                @Override
+                public void run()
+                {
+                    playerProgress();
+                }
+            }, 0, 1000);
+    }
+
+    synchronized
+    private void stopTimer()
+    {
+        if (timer == null)
         {
-            listener.finishFileLoading();
+            return;
         }
+        timer.cancel();
+        timer = null;
     }
 }
