@@ -7,6 +7,8 @@ import ru.net.serbis.folder.player.*;
 import ru.net.serbis.folder.player.data.*;
 import ru.net.serbis.folder.player.extension.share.*;
 import ru.net.serbis.folder.player.notification.*;
+import ru.net.serbis.folder.player.receiver.*;
+import ru.net.serbis.folder.player.service.*;
 import ru.net.serbis.folder.player.task.*;
 
 public class Player extends Util implements MediaPlayer.OnErrorListener, MediaPlayer.OnCompletionListener
@@ -29,7 +31,8 @@ public class Player extends Util implements MediaPlayer.OnErrorListener, MediaPl
     private List<PlayerListener> listeners = Collections.synchronizedList(new ArrayList<PlayerListener>());
     private MediaPlayer player;
     private String lastPath;
-    private Timer timer;
+    private Timer seekTimer;
+    private Timer notifyTimer;
     private List<String> files = Collections.synchronizedList(new ArrayList<String>());
     private int position;
     private NotificationProgress notification;
@@ -44,6 +47,7 @@ public class Player extends Util implements MediaPlayer.OnErrorListener, MediaPl
     {
         super.set(context);
         init();
+        startNotifyTimer();
     }
 
     private void init()
@@ -129,8 +133,8 @@ public class Player extends Util implements MediaPlayer.OnErrorListener, MediaPl
     public void setListener(PlayerListener listener)
     {
         listeners.add(listener);
-        stopTimer();
-        startTimer();
+        stopSeekTimer();
+        startSeekTimer();
         if (player == null)
         {
             return;
@@ -150,12 +154,12 @@ public class Player extends Util implements MediaPlayer.OnErrorListener, MediaPl
     public void clearListener(PlayerListener listener)
     {
         listeners.remove(listener);
-        stopTimer();
+        stopSeekTimer();
         if (listeners.isEmpty())
         {
             return;
         }
-        startTimer();
+        startSeekTimer();
     }
 
     public boolean pause()
@@ -351,7 +355,8 @@ public class Player extends Util implements MediaPlayer.OnErrorListener, MediaPl
 
     public void cancel()
     {
-        timer.cancel();
+        stopSeekTimer();
+        stopNotifyTimer();
         listeners.clear();
         stop();
     }
@@ -521,10 +526,10 @@ public class Player extends Util implements MediaPlayer.OnErrorListener, MediaPl
     }
 
     synchronized
-    private void startTimer()
+    private void startSeekTimer()
     {
-        timer = new Timer();
-        timer.schedule(
+        seekTimer = new Timer();
+        seekTimer.schedule(
             new TimerTask()
             {
                 @Override
@@ -536,13 +541,39 @@ public class Player extends Util implements MediaPlayer.OnErrorListener, MediaPl
     }
 
     synchronized
-    private void stopTimer()
+    private void stopSeekTimer()
     {
-        if (timer == null)
+        if (seekTimer == null)
         {
             return;
         }
-        timer.cancel();
-        timer = null;
+        seekTimer.cancel();
+        seekTimer = null;
+    }
+    
+    synchronized
+    private void startNotifyTimer()
+    {
+        notifyTimer = new Timer();
+        notifyTimer.schedule(
+            new TimerTask()
+            {
+                @Override
+                public void run()
+                {
+                    PlayerReceiver.sendAction(context, PlayerActions.NOTIFY);
+                }
+            }, 0, 1800000);
+    }
+
+    synchronized
+    private void stopNotifyTimer()
+    {
+        if (notifyTimer == null)
+        {
+            return;
+        }
+        notifyTimer.cancel();
+        notifyTimer = null;
     }
 }

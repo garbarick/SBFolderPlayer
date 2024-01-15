@@ -41,6 +41,10 @@ public class PlayerService extends Service
                         initNotification(context);
                         sendBroadcast(new Intent(PlayerActions.INIT_MAIN));
                         break;
+                    case PlayerActions.ACTION_NOTIFY:
+                        cancelNotifications();
+                        initNotification(context);
+                        break;
                     default:
                         result = false;
                 }

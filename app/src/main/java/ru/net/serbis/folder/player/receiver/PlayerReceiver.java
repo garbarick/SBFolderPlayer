@@ -40,6 +40,9 @@ public class PlayerReceiver extends BroadcastReceiver implements TaskCallback<Bo
             case PlayerActions.INIT:
                 tools.sendAction(PlayerActions.ACTION_INIT, this);
                 break;
+            case PlayerActions.NOTIFY:
+                tools.sendAction(PlayerActions.ACTION_NOTIFY, this);
+                break;
         }
     }
 

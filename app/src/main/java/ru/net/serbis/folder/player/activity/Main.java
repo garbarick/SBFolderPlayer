@@ -53,6 +53,8 @@ public class Main extends Activity implements AdapterView.OnItemClickListener, P
     {
         super.onCreate(state);
         SysTool.get().initPermissions(this);
+        initUi();
+        enable(false);
         registerReceiver();
         PlayerReceiver.sendAction(this, PlayerActions.INIT);
     }
@@ -65,9 +67,8 @@ public class Main extends Activity implements AdapterView.OnItemClickListener, P
         registerReceiver(receiver, filter);
     }
 
-    private void init()
+    private void initUi()
     {
-        unregisterReceiver(receiver);
         setContentView(getLayout());
 
         main = UITool.get().findView(this, R.id.main);
@@ -83,6 +84,13 @@ public class Main extends Activity implements AdapterView.OnItemClickListener, P
 
         buttons = new ButtonsListener(this);
         initList();
+    }
+
+    private void init()
+    {
+        unregisterReceiver(receiver);
+        initItemsList();
+        enable(true);
     }
 
     private int getLayout()
@@ -110,8 +118,6 @@ public class Main extends Activity implements AdapterView.OnItemClickListener, P
         list.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
         adapter = new MediaFilesAdapter(this);
         list.setAdapter(adapter);
-
-        initItemsList();
         list.setOnItemClickListener(this);
     }
 

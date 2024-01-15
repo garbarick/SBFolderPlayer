@@ -39,6 +39,7 @@
                 <action android:name="SKIP_RIGHT"/>
                 <action android:name="CLOSE"/>
                 <action android:name="INIT"/>
+                <action android:name="NOTIFY"/>
             </intent-filter>
         </receiver>
 
