@@ -11,6 +11,7 @@ import ru.net.serbis.folder.player.data.*;
 public class UITool
 {
     private static final UITool instance = new UITool();
+    private Handler hadler = new Handler(Looper.getMainLooper());
 
     public static UITool get()
     {
@@ -200,6 +201,6 @@ public class UITool
 
     public void runOnUiThread(Runnable run)
     {
-        new Handler(Looper.getMainLooper()).post(run);
+        hadler.post(run);
     }
 }

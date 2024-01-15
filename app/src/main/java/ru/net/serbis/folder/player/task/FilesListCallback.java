@@ -36,7 +36,7 @@ public class FilesListCallback implements TaskCallback<Set<String>>
         }
         finally
         {
-            activity.finishFileListLiading();
+            activity.finishFileListLoading();
         }
     }
 }

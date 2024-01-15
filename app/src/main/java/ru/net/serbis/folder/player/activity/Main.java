@@ -81,7 +81,6 @@ public class Main extends Activity implements AdapterView.OnItemClickListener, P
 
         playPause = UITool.get().findView(this, R.id.play_pause);
 
-        Player.get().setListener(this);
         buttons = new ButtonsListener(this);
         initList();
     }
@@ -156,7 +155,7 @@ public class Main extends Activity implements AdapterView.OnItemClickListener, P
         bar.setProgress(progress);
     }
 
-    public void finishFileListLiading()
+    public void finishFileListLoading()
     {
         notification.cancel();
         enable(true);
@@ -194,10 +193,17 @@ public class Main extends Activity implements AdapterView.OnItemClickListener, P
     }
 
     @Override
-    protected void onSaveInstanceState(Bundle state)
+    protected void onResume()
+    {
+        Player.get().setListener(this);
+        super.onResume();
+    }
+
+    @Override
+    protected void onPause()
     {
         Player.get().clearListener(this);
-        super.onSaveInstanceState(state);
+        super.onPause();
     }
 
     @Override
