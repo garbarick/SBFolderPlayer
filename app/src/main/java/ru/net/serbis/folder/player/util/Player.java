@@ -52,9 +52,8 @@ public class Player extends Util implements MediaPlayer.OnErrorListener, MediaPl
 
     private void init()
     {
-        SharedPreferences preferences = SysTool.get().getPreferences(context);
-        files.addAll(new TreeSet<String>(preferences.getStringSet(Constants.MEDIA_FILES, Collections.<String>emptySet())));
-        position = preferences.getInt(Constants.LAST_MEDIA_FILE, 0);
+        files.addAll(Preferences.get().getList(Constants.MEDIA_FILES));
+        position = Preferences.get().getInt(Constants.LAST_MEDIA_FILE);
     }
 
     public List<String> getFiles()
@@ -62,7 +61,7 @@ public class Player extends Util implements MediaPlayer.OnErrorListener, MediaPl
         return files;
     }
 
-    public void setFiles(Set<String> files)
+    public void setFiles(List<String> files)
     {
         this.files.clear();
         this.files.addAll(files);
@@ -82,11 +81,9 @@ public class Player extends Util implements MediaPlayer.OnErrorListener, MediaPl
         );
     }
 
-    private void saveFiles(Set<String> files)
+    private void saveFiles(List<String> files)
     {
-        SharedPreferences.Editor editor = SysTool.get().getPreferencesEditor(context);
-        editor.putStringSet(Constants.MEDIA_FILES, files);
-        editor.commit();
+        Preferences.get().setList(Constants.MEDIA_FILES, files);
     }
 
     public int getPosition()
@@ -125,9 +122,7 @@ public class Player extends Util implements MediaPlayer.OnErrorListener, MediaPl
 
     private void savePisition(int position)
     {
-        SharedPreferences.Editor editor = SysTool.get().getPreferencesEditor(context);
-        editor.putInt(Constants.LAST_MEDIA_FILE, position);
-        editor.commit();
+        Preferences.get().setInt(Constants.LAST_MEDIA_FILE, position);
     }
 
     public void setListener(PlayerListener listener)

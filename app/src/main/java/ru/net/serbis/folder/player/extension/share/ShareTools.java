@@ -76,7 +76,7 @@ public class ShareTools extends ServiceTools
         return null;
     }
 
-    public void getFileList(final TaskCallback<Set<String>> callback, String shareDir)
+    public void getFileList(final TaskCallback<List<String>> callback, String shareDir)
     {
         TaskError error = validateFile(shareDir);
         if (error != null)

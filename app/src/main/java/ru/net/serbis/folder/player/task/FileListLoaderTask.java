@@ -8,22 +8,22 @@ import ru.net.serbis.folder.player.*;
 import ru.net.serbis.folder.player.data.*;
 import ru.net.serbis.folder.player.util.*;
 
-public class FileListLoaderTask extends AsyncTask<Object, Integer, Set<String>>
+public class FileListLoaderTask extends AsyncTask<Object, Integer, List<String>>
 {
     private Context context;
-    private TaskCallback<Set<String>> callback;
+    private TaskCallback<List<String>> callback;
     private TaskError error;
     private int count;
     private int current;
 
-    public FileListLoaderTask(Context context, TaskCallback<Set<String>> callback)
+    public FileListLoaderTask(Context context, TaskCallback<List<String>> callback)
     {
         this.context = context;
         this.callback = callback;
     }
 
     @Override
-    protected Set<String> doInBackground(Object ... params)
+    protected List<String> doInBackground(Object ... params)
     {
         try
         {
@@ -44,14 +44,16 @@ public class FileListLoaderTask extends AsyncTask<Object, Integer, Set<String>>
         }
     }
 
-    private Set<String> loadLocalFiles(String dir)
+    private List<String> loadLocalFiles(String dir)
     {
-        return loadLocalFiles(new File(dir));
+        List<String> result = loadLocalFiles(new File(dir));
+        Collections.sort(result);
+        return result;
     }
 
-    private Set<String> loadLocalFiles(File dir)
+    private List<String> loadLocalFiles(File dir)
     {
-        final Set<String> result = new TreeSet<String>();
+        final List<String> result = new ArrayList<String>();
         File[] files = dir.listFiles(new FileFilter()
             {
                 public boolean accept(File file)
@@ -88,7 +90,7 @@ public class FileListLoaderTask extends AsyncTask<Object, Integer, Set<String>>
     }
 
     @Override
-    protected void onPostExecute(Set<String> result)
+    protected void onPostExecute(List<String> result)
     {
         UITool.get().setProgress(context, false);
         callback.onResult(result, error);

@@ -27,6 +27,8 @@ public class App extends Application
         playerConnection.bind();
 
         Context context = getApplicationContext();
+        SysTool.get().set(context);
+        Preferences.get().set(context);
         ShareTools.get().set(context);
         TempFiles.get().set(context);
         Player.get().set(context);

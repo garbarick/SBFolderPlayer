@@ -5,7 +5,7 @@ import ru.net.serbis.folder.player.activity.*;
 import ru.net.serbis.folder.player.data.*;
 import ru.net.serbis.folder.player.util.*;
 
-public class FilesListCallback implements TaskCallback<Set<String>>
+public class FilesListCallback implements TaskCallback<List<String>>
 {
     private Main activity;
 
@@ -21,7 +21,7 @@ public class FilesListCallback implements TaskCallback<Set<String>>
     }
 
     @Override
-    public void onResult(Set<String> result, TaskError error)
+    public void onResult(List<String> result, TaskError error)
     {
         try
         {

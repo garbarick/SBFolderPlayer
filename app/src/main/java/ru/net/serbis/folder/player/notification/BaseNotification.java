@@ -38,7 +38,7 @@ public class BaseNotification extends Notification.Builder
         setSmallIcon(R.drawable.app);
         setOngoing(true);
         setAutoCancel(true);
-        manager = SysTool.get().getService(context, Context.NOTIFICATION_SERVICE);
+        manager = SysTool.get().getService(Context.NOTIFICATION_SERVICE);
         initChannel();
     }
 

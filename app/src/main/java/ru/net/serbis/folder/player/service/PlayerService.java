@@ -99,7 +99,7 @@ public class PlayerService extends Service
         {
             playerNotification.cancel();
         }
-        NotificationManager manager = SysTool.get().getService(context, Context.NOTIFICATION_SERVICE);
+        NotificationManager manager = SysTool.get().getService(Context.NOTIFICATION_SERVICE);
         manager.cancelAll();
     }
 

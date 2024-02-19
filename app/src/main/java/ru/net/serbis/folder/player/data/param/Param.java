@@ -49,17 +49,15 @@ public abstract class Param<T, V extends View>
 
     public void saveValue(T value)
     {
-        SharedPreferences.Editor editor = SysTool.get().getPreferencesEditor(context);
         String data = value == null ? null : typeToString(value);
-        editor.putString(name, data);
-        editor.commit();
+        Preferences.get().setString(name, data);
     }
 
     public abstract String typeToString(T value);
 
     public T getValue(Context context)
     {
-        return stringToType(SysTool.get().getPreferences(context).getString(name, typeToString(defaultValue)));
+        return stringToType(Preferences.get().getString(name, typeToString(defaultValue)));
     }
 
     public abstract T stringToType(String value);

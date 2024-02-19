@@ -20,8 +20,7 @@ public class TempFiles extends Util
     public void set(Context context)
     {
         super.set(context);
-        SharedPreferences preferences = SysTool.get().getPreferences(context);
-        String data = preferences.getString(Constants.TEMP_FILES, "[]");
+        String data = Preferences.get().getString(Constants.TEMP_FILES, "[]");
         files = new JsonTools().parseMap(data);
         clearFailed();
     }
@@ -38,9 +37,7 @@ public class TempFiles extends Util
         files.put(original, temp);
         removeFirst(Params.TEMP_FILES_COUNT.getValue(context));
 
-        SharedPreferences.Editor editor = SysTool.get().getPreferencesEditor(context);
-        editor.putString(Constants.TEMP_FILES, new JsonTools().toJson(files));
-        editor.commit();
+        Preferences.get().setString(Constants.TEMP_FILES, new JsonTools().toJson(files));
 
         return temp;
     }

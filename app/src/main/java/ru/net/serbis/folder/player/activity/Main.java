@@ -167,7 +167,7 @@ public class Main extends Activity implements AdapterView.OnItemClickListener, P
         enable(true);
     }
 
-    public void setFilesList(Set<String> result)
+    public void setFilesList(List<String> result)
     {
         int countOld = adapter.getCount();
         int countNew = result.size();

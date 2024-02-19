@@ -98,9 +98,9 @@ public class IOTool
         return Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_MUSIC).getAbsolutePath();
     }
     
-    public Set<String> findFiles(String fileListPath)
+    public List<String> findFiles(String fileListPath)
     {
-        Set<String> result = new TreeSet<String>();
+        List<String> result = new ArrayList<String>();
         File file = new File(fileListPath);
         BufferedReader reader = null;
         try
@@ -124,6 +124,7 @@ public class IOTool
             close(reader);
             file.delete();
         }
+        Collections.sort(result);
         return result;
 	}
     
