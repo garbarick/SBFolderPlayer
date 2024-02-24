@@ -133,6 +133,7 @@ public class PlayerNotification extends BaseNotification implements Player.Playe
     {
         int count = Player.get().getFiles().size();
         views.setTextViewText(R.id.num, UITool.get().getNum(position, count));
+        views.setTextViewText(R.id.count, String.valueOf(count));
         if (count > 0)
         {
             String path = count > 0 ? Player.get().getFiles().get(position) : null;
