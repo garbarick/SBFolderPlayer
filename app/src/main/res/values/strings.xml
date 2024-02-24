@@ -19,6 +19,7 @@
     <string name="music_folder_type">Music folder type</string>
     <string name="temp_folder">Temp folder</string>
     <string name="temp_files_count">Temp files count</string>
+    <string name="volum_level">Volum level</string>
 
     <string name="local">Local</string>
     <string name="share">Share</string>

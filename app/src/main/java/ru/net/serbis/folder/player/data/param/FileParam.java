@@ -21,7 +21,7 @@ public class FileParam extends TextViewParam
     public void initViewValue(View parent)
     {
         final TextView view = getViewValue(parent);
-        setValue(view, getValue(context));
+        setValue(view, getValue());
         view.setOnClickListener(
             new View.OnClickListener()
             {

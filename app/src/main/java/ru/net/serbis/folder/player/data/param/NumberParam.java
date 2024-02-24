@@ -22,7 +22,7 @@ public class NumberParam extends Param<Integer, EditText>
     public void initViewValue(View parent)
     {
         EditText view = getViewValue(parent);
-        setValue(view, getValue(context));
+        setValue(view, getValue());
     }
 
     @Override

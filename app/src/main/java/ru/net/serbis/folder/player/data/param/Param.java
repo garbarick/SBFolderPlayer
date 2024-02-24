@@ -55,7 +55,7 @@ public abstract class Param<T, V extends View>
 
     public abstract String typeToString(T value);
 
-    public T getValue(Context context)
+    public T getValue()
     {
         return stringToType(Preferences.get().getString(name, typeToString(defaultValue)));
     }

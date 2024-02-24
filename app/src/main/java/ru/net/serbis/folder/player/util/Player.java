@@ -163,6 +163,7 @@ public class Player extends Util implements MediaPlayer.OnErrorListener, MediaPl
         {
             player.pause();
             playerPause();
+            saveVolumeLevel();
             return true;
         }
         return false;
@@ -191,6 +192,7 @@ public class Player extends Util implements MediaPlayer.OnErrorListener, MediaPl
         {
             return;
         }
+        restoreVolumLevel();
         player.start();
         playerPlay();
         playerDuration();
@@ -570,5 +572,22 @@ public class Player extends Util implements MediaPlayer.OnErrorListener, MediaPl
         }
         notifyTimer.cancel();
         notifyTimer = null;
+    }
+
+    private void saveVolumeLevel()
+    {
+        AudioManager manager = SysTool.get().getService(Context.AUDIO_SERVICE);
+        int level = manager.getStreamVolume(AudioManager.STREAM_MUSIC);
+        Params.VOLUM_LEVEL.saveValue(level);
+    }
+
+    private void restoreVolumLevel()
+    {
+        AudioManager manager = SysTool.get().getService(Context.AUDIO_SERVICE);
+        int level = Params.VOLUM_LEVEL.getValue();
+        if (level > -1)
+        {
+            manager.setStreamVolume(AudioManager.STREAM_MUSIC, level, 0);
+        }
     }
 }

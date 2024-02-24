@@ -17,6 +17,7 @@ public interface Params
             {MUSIC_LOCAL_FOLDER},
             {MUSIC_SHARE_FOLDER, BUFFER_SIZE, TEMP_FOLDER, TEMP_FILES_COUNT}
         });
+    NumberParam VOLUM_LEVEL = new NumberParam(R.string.volum_level, -1);
     Param[] PARAMS = new Param[]{
         MUSIC_LOCAL_FOLDER,
         MUSIC_SHARE_FOLDER,

@@ -27,15 +27,15 @@ public class TempFiles extends Util
 
     public String addFile(String original, String temp)
     {
-        File dir = new File(Params.TEMP_FOLDER.getValue(context));
+        File dir = new File(Params.TEMP_FOLDER.getValue());
         dir.mkdirs();
         File tempFile = new File(temp);
         File appFile = new File(dir, new Date().getTime() + "." + IOTool.get().getExt(temp));
-        IOTool.get().moveFileQuietly(tempFile, appFile, Params.BUFFER_SIZE.getValue(context));
+        IOTool.get().moveFileQuietly(tempFile, appFile, Params.BUFFER_SIZE.getValue());
         temp = appFile.getAbsolutePath();
         
         files.put(original, temp);
-        removeFirst(Params.TEMP_FILES_COUNT.getValue(context));
+        removeFirst(Params.TEMP_FILES_COUNT.getValue());
 
         Preferences.get().setString(Constants.TEMP_FILES, new JsonTools().toJson(files));
 

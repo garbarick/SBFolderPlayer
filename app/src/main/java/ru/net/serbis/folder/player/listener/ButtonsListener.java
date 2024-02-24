@@ -58,7 +58,7 @@ public class ButtonsListener implements View.OnClickListener
 
     public void refreshFilesList()
     {
-        FolderType type = Params.MUSIC_FOLDER_TYPE.getValue(activity);
+        FolderType type = Params.MUSIC_FOLDER_TYPE.getValue();
         switch (type)
         {
             case LOCAL:
@@ -75,7 +75,7 @@ public class ButtonsListener implements View.OnClickListener
 
     private void refreshLocalFilesList()
     {
-        String dir = Params.MUSIC_LOCAL_FOLDER.getValue(activity);
+        String dir = Params.MUSIC_LOCAL_FOLDER.getValue();
         activity.enable(false);
         activity.initNotification(R.string.loading_files);
         new FileListLoaderTask(activity, new FilesListCallback(activity)).execute(dir);
@@ -83,7 +83,7 @@ public class ButtonsListener implements View.OnClickListener
 
     private void refreshShareFilesList()
     {
-        String dir = Params.MUSIC_SHARE_FOLDER.getValue(activity);
+        String dir = Params.MUSIC_SHARE_FOLDER.getValue();
         activity.enable(false);
         activity.initNotification(R.string.loading_files);
         ShareTools.get().getFileList(new FilesListCallback(activity), dir);
