@@ -5,6 +5,7 @@ import android.content.*;
 import android.os.*;
 import ru.net.serbis.folder.player.notification.*;
 import ru.net.serbis.folder.player.util.*;
+import ru.net.serbis.folder.player.data.*;
 
 public class PlayerService extends Service
 {
@@ -90,7 +91,10 @@ public class PlayerService extends Service
 
     private void initNotification(Context context)
     {
-        playerNotification = new PlayerNotification(context);
+        if (Params.NOTIFICATION_PLAYER.getValue())
+        {
+            playerNotification = new PlayerNotification(context);
+        }
     }
 
     private void cancelNotifications()

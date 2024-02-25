@@ -6,6 +6,8 @@ import android.view.*;
 import ru.net.serbis.folder.player.*;
 import ru.net.serbis.folder.player.adapter.*;
 import ru.net.serbis.folder.player.data.param.*;
+import ru.net.serbis.folder.player.receiver.*;
+import ru.net.serbis.folder.player.service.*;
 
 public class ParamsDialog extends AlertDialog.Builder implements DialogInterface.OnClickListener
 {
@@ -37,9 +39,11 @@ public class ParamsDialog extends AlertDialog.Builder implements DialogInterface
         {
             case Dialog.BUTTON_POSITIVE:
                 adapter.saveValues();
+                PlayerReceiver.sendAction(context, PlayerActions.NOTIFY);
                 break;
             case Dialog.BUTTON_NEUTRAL:
                 adapter.reset();
+                PlayerReceiver.sendAction(context, PlayerActions.NOTIFY);
                 break;
         }
     }

@@ -18,12 +18,14 @@ public interface Params
             {MUSIC_SHARE_FOLDER, BUFFER_SIZE, TEMP_FOLDER, TEMP_FILES_COUNT}
         });
     NumberParam VOLUM_LEVEL = new NumberParam(R.string.volum_level, -1);
+    BooleanParam NOTIFICATION_PLAYER = new BooleanParam(R.string.notification_player, true);
     Param[] PARAMS = new Param[]{
         MUSIC_LOCAL_FOLDER,
         MUSIC_SHARE_FOLDER,
         MUSIC_FOLDER_TYPE,
         BUFFER_SIZE,
         TEMP_FOLDER,
-        TEMP_FILES_COUNT
+        TEMP_FILES_COUNT,
+        NOTIFICATION_PLAYER
     };
 }
