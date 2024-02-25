@@ -42,15 +42,24 @@ public abstract class ServiceTools extends Util
 
     protected abstract ExtConnection getConnection()
 
+    private int lastProgress = -1;
+    
     protected <T> void progress(TaskCallback<T> callback, int progress)
     {
         try
         {
-            callback.progress(progress);
+            if (lastProgress != progress)
+            {
+                callback.progress(progress);
+            }
         }
         catch (Exception e)
         {
             Log.error(this, e);
+        }
+        finally
+        {
+            lastProgress = progress;
         }
     }
 
@@ -67,6 +76,7 @@ public abstract class ServiceTools extends Util
         finally
         {
             UITool.get().setProgress(context, false);
+            lastProgress = -1;
         }
     }
 
