@@ -7,12 +7,11 @@ import ru.net.serbis.folder.player.util.*;
 
 public class SeekBarParam extends NumberParam<SeekBar>
 {
-    private int min, max;
+    private int max;
 
-    public SeekBarParam(int nameId, int min, int max, int defaultValue)
+    public SeekBarParam(int nameId, int max, int defaultValue)
     {
         super(nameId, defaultValue);
-        this.min = min;
         this.max = max;
     }
 
@@ -26,7 +25,6 @@ public class SeekBarParam extends NumberParam<SeekBar>
     public void initViewValue(View parent)
     {
         SeekBar view = getViewValue(parent);
-        view.setMin(min);
         view.setMax(max);
         setValue(view, getValue());
     }

@@ -19,7 +19,7 @@ public interface Params
         });
     EditNumberParam VOLUM_LEVEL = new EditNumberParam(R.string.volum_level, -1);
     BooleanParam NOTIFICATION_PLAYER = new BooleanParam(R.string.notification_player, true);
-    SeekBarParam TRANSPARENCY = new SeekBarParam(R.string.transparency, 0, 255, 0);
+    SeekBarParam TRANSPARENCY = new SeekBarParam(R.string.transparency, 255, 0);
     Param[] PARAMS = new Param[]{
         MUSIC_LOCAL_FOLDER,
         MUSIC_SHARE_FOLDER,
