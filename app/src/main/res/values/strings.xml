@@ -21,6 +21,7 @@
     <string name="temp_files_count">Temp files count</string>
     <string name="volum_level">Volum level</string>
     <string name="notification_player">Notification player</string>
+    <string name="transparency">Transparency</string>
 
     <string name="local">Local</string>
     <string name="share">Share</string>

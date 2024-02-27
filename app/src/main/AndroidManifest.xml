@@ -11,7 +11,7 @@
         android:allowBackup="true"
         android:icon="@drawable/app"
         android:label="@string/app"
-        android:theme="@android:style/Theme.DeviceDefault"
+        android:theme="@style/Theme"
 		android:resizeableActivity = "true">
 
         <activity

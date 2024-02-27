@@ -1,28 +1,13 @@
 package ru.net.serbis.folder.player.data.param;
 
 import android.view.*;
-import android.widget.*;
-import ru.net.serbis.folder.player.*;
 import ru.net.serbis.folder.player.util.*;
 
-public class NumberParam extends Param<Integer, EditText>
+public abstract class NumberParam<V extends View> extends Param<Integer, V>
 {
     public NumberParam(int nameId, Integer defaultValue)
     {
         super(nameId, defaultValue);
-    }
-
-    @Override
-    public int getLayoutId()
-    {
-        return R.layout.param_number;
-    }
-
-    @Override
-    public void initViewValue(View parent)
-    {
-        EditText view = getViewValue(parent);
-        setValue(view, getValue());
     }
 
     @Override
@@ -43,17 +28,5 @@ public class NumberParam extends Param<Integer, EditText>
             Log.error(this, e);
             return defaultValue;
         }
-    }
-
-    @Override
-    public void setValue(EditText view, Integer value)
-    {
-        view.setText(typeToString(value));
-    }
-
-    @Override
-    public Integer getValue(EditText view)
-    {
-        return stringToType(view.getText().toString());
     }
 }

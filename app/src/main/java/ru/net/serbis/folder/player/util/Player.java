@@ -163,7 +163,6 @@ public class Player extends Util implements MediaPlayer.OnErrorListener, MediaPl
         {
             player.pause();
             playerPause();
-            saveVolumeLevel();
             return true;
         }
         return false;
@@ -192,7 +191,6 @@ public class Player extends Util implements MediaPlayer.OnErrorListener, MediaPl
         {
             return;
         }
-        restoreVolumLevel();
         player.start();
         playerPlay();
         playerDuration();
@@ -246,6 +244,7 @@ public class Player extends Util implements MediaPlayer.OnErrorListener, MediaPl
         {
             return;
         }
+        saveVolumeLevel();
         UITool.get().runOnUiThread(
             new Runnable()
             {
@@ -267,6 +266,7 @@ public class Player extends Util implements MediaPlayer.OnErrorListener, MediaPl
         {
             return;
         }
+        restoreVolumLevel();
         UITool.get().runOnUiThread(
             new Runnable()
             {

@@ -8,17 +8,18 @@ public interface Params
 {
     FileParam MUSIC_LOCAL_FOLDER = new FileParam(R.string.music_local_folder, IOTool.get().getMusicFolderPath(), true, false);
     ShareDirParam MUSIC_SHARE_FOLDER = new ShareDirParam(R.string.music_share_folder, null);
-    NumberParam BUFFER_SIZE = new NumberParam(R.string.buffer_size, 10240);
+    EditNumberParam BUFFER_SIZE = new EditNumberParam(R.string.buffer_size, 10240);
     TempFolderParam TEMP_FOLDER = new TempFolderParam(R.string.temp_folder);
-    NumberParam TEMP_FILES_COUNT = new NumberParam(R.string.temp_files_count, 10);
+    EditNumberParam TEMP_FILES_COUNT = new EditNumberParam(R.string.temp_files_count, 10);
     FolderTypeParam MUSIC_FOLDER_TYPE = new FolderTypeParam(
         R.string.music_folder_type,
         new Param[][]{
             {MUSIC_LOCAL_FOLDER},
             {MUSIC_SHARE_FOLDER, BUFFER_SIZE, TEMP_FOLDER, TEMP_FILES_COUNT}
         });
-    NumberParam VOLUM_LEVEL = new NumberParam(R.string.volum_level, -1);
+    EditNumberParam VOLUM_LEVEL = new EditNumberParam(R.string.volum_level, -1);
     BooleanParam NOTIFICATION_PLAYER = new BooleanParam(R.string.notification_player, true);
+    SeekBarParam TRANSPARENCY = new SeekBarParam(R.string.transparency, 0, 255, 0);
     Param[] PARAMS = new Param[]{
         MUSIC_LOCAL_FOLDER,
         MUSIC_SHARE_FOLDER,
@@ -26,6 +27,7 @@ public interface Params
         BUFFER_SIZE,
         TEMP_FOLDER,
         TEMP_FILES_COUNT,
-        NOTIFICATION_PLAYER
+        NOTIFICATION_PLAYER,
+        TRANSPARENCY
     };
 }

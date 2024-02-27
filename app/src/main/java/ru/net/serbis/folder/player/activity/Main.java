@@ -69,6 +69,7 @@ public class Main extends Activity implements AdapterView.OnItemClickListener, P
 
     private void initUi()
     {
+        UITool.get().setColorTransparent(this, Params.TRANSPARENCY.getValue());
         setContentView(getLayout());
 
         main = UITool.get().findView(this, R.id.main);

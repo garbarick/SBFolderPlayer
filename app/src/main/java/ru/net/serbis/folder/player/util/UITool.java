@@ -2,6 +2,8 @@ package ru.net.serbis.folder.player.util;
 
 import android.app.*;
 import android.content.*;
+import android.graphics.*;
+import android.graphics.drawable.*;
 import android.os.*;
 import android.view.*;
 import android.widget.*;
@@ -202,5 +204,12 @@ public class UITool
     public void runOnUiThread(Runnable run)
     {
         hadler.post(run);
+    }
+
+    public void setColorTransparent(Activity context, int transparent)
+    {
+        Window window = context.getWindow();
+        int color = Color.argb(255 - transparent, 50, 50, 50);
+        window.setBackgroundDrawable(new ColorDrawable(color));
     }
 }
