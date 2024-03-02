@@ -55,7 +55,14 @@ public class BaseNotification extends Notification.Builder
 
     public void update()
     {
-        manager.notify(id, build());
+        try
+        {
+            manager.notify(id, build());
+        }
+        catch(Exception e)
+        {
+            Log.error(this, e);
+        }
     }
 
     public void cancel()
