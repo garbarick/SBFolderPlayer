@@ -3,6 +3,7 @@ package ru.net.serbis.folder.player.receiver;
 import android.content.*;
 import android.view.*;
 import ru.net.serbis.folder.player.service.*;
+import ru.net.serbis.folder.player.util.*;
 
 public class MediaButtonReceiver extends BroadcastReceiver
 {  
@@ -30,6 +31,7 @@ public class MediaButtonReceiver extends BroadcastReceiver
         {
             case KeyEvent.KEYCODE_MEDIA_PLAY:
             case KeyEvent.KEYCODE_MEDIA_PAUSE:
+            case KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE:
                 PlayerReceiver.sendAction(context, PlayerActions.PLAY_PAUSE);
                 break;
 
@@ -40,6 +42,9 @@ public class MediaButtonReceiver extends BroadcastReceiver
             case KeyEvent.KEYCODE_MEDIA_PREVIOUS:
                 PlayerReceiver.sendAction(context, PlayerActions.PREVIOUS);
                 break;
+
+            default:
+                UITool.get().toast(context, "KeyEvent: " + event);
         }
     }
 } 
