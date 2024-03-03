@@ -48,6 +48,7 @@ public class Player extends Util implements MediaPlayer.OnErrorListener, MediaPl
         super.set(context);
         init();
         startNotifyTimer();
+        registerMediaButtons();
     }
 
     private void init()
@@ -590,5 +591,12 @@ public class Player extends Util implements MediaPlayer.OnErrorListener, MediaPl
         {
             manager.setStreamVolume(AudioManager.STREAM_MUSIC, level, 0);
         }
+    }
+
+    private void registerMediaButtons()
+    {
+        AudioManager manager = SysTool.get().getService(Context.AUDIO_SERVICE);
+        manager.registerMediaButtonEventReceiver(
+            new ComponentName(context.getPackageName(), MediaButtonReceiver.class.getName()));
     }
 }
