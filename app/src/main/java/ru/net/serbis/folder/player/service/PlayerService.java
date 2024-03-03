@@ -34,9 +34,6 @@ public class PlayerService extends Service
                     case PlayerActions.ACTION_SKIP_RIGHT:
                         Player.get().skipRight();
                         break;
-                    case PlayerActions.ACTION_CLOSE:
-                        playerNotification.cancel();
-                        break;
                     case PlayerActions.ACTION_INIT:
                         cancelNotifications();
                         initNotification(context);

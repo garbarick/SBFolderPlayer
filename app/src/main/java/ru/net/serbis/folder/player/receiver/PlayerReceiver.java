@@ -34,9 +34,6 @@ public class PlayerReceiver extends BroadcastReceiver implements TaskCallback<Bo
             case PlayerActions.SKIP_RIGHT:
                 tools.sendAction(PlayerActions.ACTION_SKIP_RIGHT, this);
                 break;
-            case PlayerActions.CLOSE:
-                tools.sendAction(PlayerActions.ACTION_CLOSE, this);
-                break;
             case PlayerActions.INIT:
                 tools.sendAction(PlayerActions.ACTION_INIT, this);
                 break;

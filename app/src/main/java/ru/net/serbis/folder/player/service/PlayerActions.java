@@ -10,7 +10,6 @@ public interface PlayerActions
     String PLAY_PAUSE = "PLAY_PAUSE";
     String SKIP_RIGHT = "SKIP_RIGHT";
     String NEXT = "NEXT";
-    String CLOSE = "CLOSE";
     String NOTIFY = "NOTIFY";
 
     int ACTION_PLAY_PAUSE = 100;
@@ -18,7 +17,7 @@ public interface PlayerActions
     int ACTION_NEXT = 102;
     int ACTION_SKIP_LEFT = 103;
     int ACTION_SKIP_RIGHT = 104;
-    int ACTION_CLOSE = 105;
+
     int ACTION_INIT = 106;
     int ACTION_NOTIFY = 107;
     int PLAYER_ERROR = 400;
