@@ -43,6 +43,16 @@ public class MediaButtonReceiver extends BroadcastReceiver
                 PlayerReceiver.sendAction(context, PlayerActions.PREVIOUS);
                 break;
 
+            case KeyEvent.KEYCODE_MEDIA_SKIP_FORWARD:
+            case KeyEvent.KEYCODE_MEDIA_STEP_FORWARD:
+                PlayerReceiver.sendAction(context, PlayerActions.SKIP_RIGHT);
+                break;
+
+            case KeyEvent.KEYCODE_MEDIA_SKIP_BACKWARD:
+            case KeyEvent.KEYCODE_MEDIA_STEP_BACKWARD:
+                PlayerReceiver.sendAction(context, PlayerActions.SKIP_LEFT);
+                break;
+
             default:
                 UITool.get().toast(context, "KeyEvent: " + event);
         }
