@@ -54,11 +54,13 @@ public class PlayerNotification extends BaseNotification implements Player.Playe
     private void setButtons()
     {
         setAction(bigViews, R.id.previous, PlayerActions.PREVIOUS);
+        setAction(views, R.id.previous, PlayerActions.PREVIOUS);
         setAction(bigViews, R.id.skip_left, PlayerActions.SKIP_LEFT);
         setAction(views, R.id.play_pause, PlayerActions.PLAY_PAUSE);
         setAction(bigViews, R.id.play_pause, PlayerActions.PLAY_PAUSE);
         setAction(bigViews, R.id.skip_right, PlayerActions.SKIP_RIGHT);
         setAction(bigViews, R.id.next, PlayerActions.NEXT);
+        setAction(views, R.id.next, PlayerActions.NEXT);
 
         if (old)
         {
