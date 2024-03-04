@@ -209,7 +209,12 @@ public class UITool
     public void setColorTransparent(Activity context, int transparent)
     {
         Window window = context.getWindow();
-        int color = Color.argb(255 - transparent, 50, 50, 50);
+        int color = getColorTransparent(transparent);
         window.setBackgroundDrawable(new ColorDrawable(color));
+    }
+
+    public int getColorTransparent(int transparent)
+    {
+        return Color.argb(255 - transparent, 50, 50, 50);
     }
 }

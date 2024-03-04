@@ -2,7 +2,6 @@ package ru.net.serbis.folder.player.notification;
 
 import android.app.*;
 import android.content.*;
-import android.os.*;
 import android.widget.*;
 import java.io.*;
 import ru.net.serbis.folder.player.*;
@@ -30,7 +29,7 @@ public class PlayerNotification extends BaseNotification implements Player.Playe
 
         views = new RemoteViews(context.getPackageName(), R.layout.notification_player);
         bigViews = new RemoteViews(context.getPackageName(), R.layout.notification_big_player);
-        
+
         setHeader();
         setButtons();
 

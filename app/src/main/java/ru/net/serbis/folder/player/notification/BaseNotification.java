@@ -38,7 +38,6 @@ public class BaseNotification extends Notification.Builder
     {
         setSmallIcon(R.drawable.app);
         setOngoing(true);
-        setAutoCancel(true);
         setContentIntent(PendingIntent.getActivity(context, 0, new Intent(context, Main.class), PendingIntent.FLAG_UPDATE_CURRENT));
         manager = SysTool.get().getService(Context.NOTIFICATION_SERVICE);
         initChannel();
