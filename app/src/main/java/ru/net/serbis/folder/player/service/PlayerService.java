@@ -2,10 +2,12 @@ package ru.net.serbis.folder.player.service;
 
 import android.app.*;
 import android.content.*;
+import android.media.*;
 import android.os.*;
-import ru.net.serbis.folder.player.notification.*;
-import ru.net.serbis.folder.player.util.*;
 import ru.net.serbis.folder.player.data.*;
+import ru.net.serbis.folder.player.notification.*;
+import ru.net.serbis.folder.player.receiver.*;
+import ru.net.serbis.folder.player.util.*;
 
 public class PlayerService extends Service
 {
@@ -37,11 +39,13 @@ public class PlayerService extends Service
                     case PlayerActions.ACTION_INIT:
                         cancelNotifications();
                         initNotification(context);
+                        registerMediaButtons();
                         sendBroadcast(new Intent(PlayerActions.INIT_MAIN));
                         break;
                     case PlayerActions.ACTION_NOTIFY:
                         cancelNotifications();
                         initNotification(context);
+                        registerMediaButtons();
                         break;
                     default:
                         result = false;
@@ -144,5 +148,13 @@ public class PlayerService extends Service
         Bundle data = new Bundle();
         data.putBoolean(PlayerActions.RESULT, true);
         sendResult(data);
+    }
+
+    private void registerMediaButtons()
+    {
+        AudioManager manager = SysTool.get().getService(Context.AUDIO_SERVICE);
+        ComponentName name = new ComponentName(context.getPackageName(), MediaButtonReceiver.class.getName());
+        manager.unregisterMediaButtonEventReceiver(name);
+        manager.registerMediaButtonEventReceiver(name);
     }
 }
