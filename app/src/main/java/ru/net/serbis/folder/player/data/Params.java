@@ -19,7 +19,8 @@ public interface Params
         });
     EditNumberParam VOLUM_LEVEL = new EditNumberParam(R.string.volum_level, -1);
     BooleanParam NOTIFICATION_PLAYER = new BooleanParam(R.string.notification_player, true);
-    SeekBarParam TRANSPARENCY = new SeekBarParam(R.string.transparency, 255, 0);
+    MainTransparency TRANSPARENCY = new MainTransparency();
+    WidgetTransparency WIDGET_TRANSPARENCY = new WidgetTransparency();
     Param[] PARAMS = new Param[]{
         MUSIC_LOCAL_FOLDER,
         MUSIC_SHARE_FOLDER,
@@ -28,6 +29,7 @@ public interface Params
         TEMP_FOLDER,
         TEMP_FILES_COUNT,
         NOTIFICATION_PLAYER,
-        TRANSPARENCY
+        TRANSPARENCY,
+        WIDGET_TRANSPARENCY
     };
 }

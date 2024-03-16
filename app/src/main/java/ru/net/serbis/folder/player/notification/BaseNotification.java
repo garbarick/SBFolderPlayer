@@ -5,7 +5,6 @@ import android.content.*;
 import android.os.*;
 import java.util.*;
 import ru.net.serbis.folder.player.*;
-import ru.net.serbis.folder.player.activity.*;
 import ru.net.serbis.folder.player.util.*;
 
 public class BaseNotification extends Notification.Builder
@@ -38,7 +37,6 @@ public class BaseNotification extends Notification.Builder
     {
         setSmallIcon(R.drawable.app);
         setOngoing(true);
-        setContentIntent(PendingIntent.getActivity(context, 0, new Intent(context, Main.class), PendingIntent.FLAG_UPDATE_CURRENT));
         manager = SysTool.get().getService(Context.NOTIFICATION_SERVICE);
         initChannel();
     }

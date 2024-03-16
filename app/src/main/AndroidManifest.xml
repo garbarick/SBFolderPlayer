@@ -11,7 +11,7 @@
         android:allowBackup="true"
         android:icon="@drawable/app"
         android:label="@string/app"
-        android:theme="@style/Theme"
+        android:theme="@style/theme"
 		android:resizeableActivity = "true">
 
         <activity
@@ -46,8 +46,30 @@
         <receiver 
             android:name=".receiver.MediaButtonReceiver">           
             <intent-filter>
-                <action android:name="android.intent.action.MEDIA_BUTTON" />               
+                <action android:name="android.intent.action.MEDIA_BUTTON"/>               
             </intent-filter>
+        </receiver>
+
+        <receiver
+            android:name=".widget.SmallPlayerWidget"
+            android:label="@string/small_player">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE"/>
+            </intent-filter>
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/widget_small_player"/>
+        </receiver>
+
+        <receiver
+            android:name=".widget.BigPlayerWidget"
+            android:label="@string/big_player">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE"/>
+            </intent-filter>
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/widget_big_player"/>
         </receiver>
 
     </application>

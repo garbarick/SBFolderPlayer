@@ -17,7 +17,7 @@ public class Player extends Util implements MediaPlayer.OnErrorListener, MediaPl
 
     public interface PlayerListener
     {
-        void playerProgress(int currentPosition);
+        void playerProgress(int progress);
         void playerDuration(int duration);
         void playerPlay();
         void playerPause();

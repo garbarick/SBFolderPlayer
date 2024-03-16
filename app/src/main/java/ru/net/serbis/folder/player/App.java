@@ -7,8 +7,10 @@ import ru.net.serbis.folder.player.data.*;
 import ru.net.serbis.folder.player.data.param.*;
 import ru.net.serbis.folder.player.extension.share.*;
 import ru.net.serbis.folder.player.handler.*;
+import ru.net.serbis.folder.player.listener.*;
 import ru.net.serbis.folder.player.service.*;
 import ru.net.serbis.folder.player.util.*;
+import ru.net.serbis.folder.player.view.*;
 
 public class App extends Application
 {
@@ -33,6 +35,8 @@ public class App extends Application
         TempFiles.get().set(context);
         Player.get().set(context);
         PlayerTools.get().set(context);
+        WidgetListener.get().set(context);
+        PlayerView.get().set(context);
 
         Thread.setDefaultUncaughtExceptionHandler(new ExceptionHandler(getApplicationContext()));
     }
