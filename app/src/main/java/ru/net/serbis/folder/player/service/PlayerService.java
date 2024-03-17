@@ -68,6 +68,7 @@ public class PlayerService extends Service
     private Messenger messenger;
     private Context context;
     private PlayerNotification playerNotification;
+    private ScreenOnReceiver screenOnReceiver;
 
     public static PlayerService get()
     {
@@ -88,6 +89,7 @@ public class PlayerService extends Service
         messenger = new Messenger(new IncomingHandler());
         context = getApplicationContext();
         sendBroadcast(new Intent(PlayerActions.READY));
+        registerScreenOnListener();
     }
 
     private void initNotification(Context context)
@@ -119,6 +121,7 @@ public class PlayerService extends Service
     {
         cancelNotifications();
         Player.get().cancel();
+        unRegisterScreenOnListener();
     }
 
     private void sendResult(Bundle data)
@@ -156,5 +159,23 @@ public class PlayerService extends Service
         ComponentName name = new ComponentName(context.getPackageName(), MediaButtonReceiver.class.getName());
         manager.unregisterMediaButtonEventReceiver(name);
         manager.registerMediaButtonEventReceiver(name);
+    }
+
+    private void registerScreenOnListener()
+    {
+        IntentFilter filter = new IntentFilter();
+        filter.addAction(Intent.ACTION_SCREEN_ON);
+        filter.addAction(Intent.ACTION_DREAMING_STOPPED);
+        screenOnReceiver = new ScreenOnReceiver();
+        registerReceiver(screenOnReceiver, filter);
+        
+    }
+
+    private void unRegisterScreenOnListener()
+    {
+        if (screenOnReceiver != null)
+        {
+            unregisterReceiver(screenOnReceiver);
+        }
     }
 }
