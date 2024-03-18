@@ -157,6 +157,11 @@ public class Player extends Util implements MediaPlayer.OnErrorListener, MediaPl
         startSeekTimer();
     }
 
+    public boolean isRegistered(PlayerListener listener)
+    {
+        return listeners.contains(listener);
+    }
+
     public boolean pause()
     {
         if (isPlaying())

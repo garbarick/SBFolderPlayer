@@ -1,6 +1,7 @@
 package ru.net.serbis.folder.player.listener;
 
 import android.appwidget.*;
+import android.content.*;
 import java.util.*;
 import ru.net.serbis.folder.player.util.*;
 import ru.net.serbis.folder.player.widget.*;
@@ -35,9 +36,8 @@ public class WidgetListener extends Util implements Player.PlayerListener
     public void add(int id, BasePlayerWidget item)
     {
         widgets.put(id, item);
-        if (widgets.size() == 1)
+        if (!widgets.isEmpty() && !Player.get().isRegistered(this))
         {
-            Player.get().clearListener(this);
             Player.get().setListener(this);
         }
     }
@@ -117,5 +117,28 @@ public class WidgetListener extends Util implements Player.PlayerListener
     @Override
     public void finishFileLoading()
     {
+    }
+
+    @Override
+    public void set(Context context)
+    {
+        super.set(context);
+        initWidgets(
+            BigPlayerWidget.class,
+            SmallPlayerWidget.class);
+    }
+
+    private void initWidgets(Class ... classes)
+    {
+        AppWidgetManager manager = AppWidgetManager.getInstance(context);
+        for (Class classItem : classes)
+        {
+            ComponentName name = new ComponentName(context, classItem.getName());
+            int[] ids = manager.getAppWidgetIds(name);
+            Intent updateIntent = new Intent();
+            updateIntent.setAction(AppWidgetManager.ACTION_APPWIDGET_UPDATE);
+            updateIntent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS, ids);
+            context.sendBroadcast(updateIntent);
+        }
     }
 }
