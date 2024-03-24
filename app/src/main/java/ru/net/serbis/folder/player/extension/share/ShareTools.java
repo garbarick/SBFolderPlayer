@@ -40,6 +40,7 @@ public class ShareTools extends ServiceTools
         request.put(Share.PATH, shareDir);
         request.put(Share.BUFFER_SIZE, bufferSize.toString());
 
+        
         sendServiceAction(
             Share.ACTION_UPLOAD,
             request,

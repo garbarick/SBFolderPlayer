@@ -54,7 +54,7 @@ public class MediaButtonReceiver extends BroadcastReceiver
                 break;
 
             default:
-                UITool.get().toast(context, "KeyEvent: " + event);
+                UITool.get().toast("KeyEvent: " + event);
         }
     }
 } 

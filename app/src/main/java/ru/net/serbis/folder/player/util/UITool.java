@@ -1,7 +1,6 @@
 package ru.net.serbis.folder.player.util;
 
 import android.app.*;
-import android.content.*;
 import android.graphics.*;
 import android.graphics.drawable.*;
 import android.os.*;
@@ -10,7 +9,7 @@ import android.widget.*;
 import ru.net.serbis.folder.player.*;
 import ru.net.serbis.folder.player.data.*;
 
-public class UITool
+public class UITool extends Util
 {
     private static final UITool instance = new UITool();
     private Handler hadler = new Handler(Looper.getMainLooper());
@@ -110,7 +109,7 @@ public class UITool
         }
     }
 
-    public void toast(final Context context, final String text)
+    public void toast(final String text)
     {
         runOnUiThread(
             new Runnable()
@@ -123,23 +122,23 @@ public class UITool
         );
     }
     
-    public void toast(Context context, int code, String text)
+    public void toast(int code, String text)
     {
-        toast(context, code + ": " + text);
+        toast(code + ": " + text);
     }
 
-    public void toast(Context context, TaskError error)
+    public void toast(TaskError error)
     {
         if (error == null)
         {
             return;
         }
-        toast(context, error.getCode(), error.getMessage());
+        toast(error.getCode(), error.getMessage());
     }
     
-    public void notImplementedYet(Context context)
+    public void notImplementedYet()
     {
-        toast(context, context.getResources().getString(R.string.error_not_implemented));
+        toast(context.getResources().getString(R.string.error_not_implemented));
     }
 
     public int getPercent(long max, long cur)
@@ -157,13 +156,13 @@ public class UITool
         }
     }
     
-    public void setProgress(Context context, boolean progress)
+    public void setProgress(boolean progress)
     {
         App app = (App) context.getApplicationContext();
         app.setProgress(progress);
     }
     
-    public boolean isProgress(Context context)
+    public boolean isProgress()
     {
         App app = (App) context.getApplicationContext();
         return app.isProgress();

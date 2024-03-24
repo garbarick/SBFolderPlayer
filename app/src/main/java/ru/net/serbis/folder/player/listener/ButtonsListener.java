@@ -68,7 +68,7 @@ public class ButtonsListener implements View.OnClickListener
                 refreshShareFilesList();
                 break;
             default:
-                UITool.get().toast(activity, activity.getResources().getString(R.string.error_unknown_folder_type) + " " + type);
+                UITool.get().toast(activity.getResources().getString(R.string.error_unknown_folder_type) + " " + type);
                 return;
         }
     }

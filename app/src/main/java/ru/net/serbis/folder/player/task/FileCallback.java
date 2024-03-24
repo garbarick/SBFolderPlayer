@@ -30,7 +30,7 @@ public class FileCallback implements TaskCallback<String>
         {
             if (error != null)
             {
-                UITool.get().toast(context, error);
+                UITool.get().toast(error);
             }
             else
             {

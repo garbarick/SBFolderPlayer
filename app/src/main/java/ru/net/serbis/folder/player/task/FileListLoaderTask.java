@@ -4,7 +4,6 @@ import android.content.*;
 import android.os.*;
 import java.io.*;
 import java.util.*;
-import ru.net.serbis.folder.player.*;
 import ru.net.serbis.folder.player.data.*;
 import ru.net.serbis.folder.player.util.*;
 
@@ -27,7 +26,6 @@ public class FileListLoaderTask extends AsyncTask<Object, Integer, List<String>>
     {
         try
         {
-            UITool.get().setProgress(context, true);
             String dir = (String) params[0];
             publishProgress(0);
             return loadLocalFiles(dir);
@@ -92,7 +90,6 @@ public class FileListLoaderTask extends AsyncTask<Object, Integer, List<String>>
     @Override
     protected void onPostExecute(List<String> result)
     {
-        UITool.get().setProgress(context, false);
-        callback.onResult(result, error);
+        UITool.get().setProgress(false);
     }
 }

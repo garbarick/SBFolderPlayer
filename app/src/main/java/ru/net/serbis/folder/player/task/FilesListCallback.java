@@ -27,7 +27,7 @@ public class FilesListCallback implements TaskCallback<List<String>>
         {
             if (error != null)
             {
-                UITool.get().toast(activity, error);
+                UITool.get().toast(error);
             }
             else
             {

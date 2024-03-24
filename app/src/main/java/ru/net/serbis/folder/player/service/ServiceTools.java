@@ -16,7 +16,6 @@ public abstract class ServiceTools extends Util
 
     protected void sendServiceAction(int action, Map<String, String> request, Handler reply)
     {
-        UITool.get().setProgress(context, true);
         ExtConnection connection = getConnection();
         if (!connection.isBound())
         {
@@ -75,7 +74,6 @@ public abstract class ServiceTools extends Util
         }
         finally
         {
-            UITool.get().setProgress(context, false);
             lastProgress = -1;
         }
     }

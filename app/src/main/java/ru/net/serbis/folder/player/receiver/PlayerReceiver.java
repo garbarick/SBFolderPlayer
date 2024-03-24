@@ -51,7 +51,7 @@ public class PlayerReceiver extends BroadcastReceiver implements TaskCallback<Bo
     @Override
     public void onResult(Boolean result, TaskError error)
     {
-        UITool.get().toast(context, error);
+        UITool.get().toast(error);
     }
 
     public static void sendAction(Context context, String action)

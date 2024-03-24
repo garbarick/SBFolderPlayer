@@ -462,8 +462,13 @@ public class Player extends Util implements MediaPlayer.OnErrorListener, MediaPl
             {
                 play(TempFiles.get().get(path));
             }
+            else if (UITool.get().isProgress())
+            {
+                UITool.get().toast(context.getResources().getString(R.string.in_progress));
+            }
             else
             {
+                UITool.get().setProgress(true);
                 notification = NotificationProgress.get(context, R.string.loading_files);
                 startFileLoading();
                 ShareTools.get().getFile(new FileCallback(context, this, path), path);
@@ -512,6 +517,7 @@ public class Player extends Util implements MediaPlayer.OnErrorListener, MediaPl
 
     public void finishFileLoading()
     {
+        UITool.get().setProgress(false);
         UITool.get().runOnUiThread(
             new Runnable()
             {
