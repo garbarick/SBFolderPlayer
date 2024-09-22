@@ -2,10 +2,10 @@ package ru.net.serbis.folder.player.receiver;
 
 import android.app.*;
 import android.content.*;
-import ru.net.serbis.folder.player.data.*;
 import ru.net.serbis.folder.player.service.*;
 import ru.net.serbis.folder.player.task.*;
-import ru.net.serbis.folder.player.util.*;
+import ru.net.serbis.utils.*;
+import ru.net.serbis.utils.bean.*;
 
 public class PlayerReceiver extends BroadcastReceiver implements TaskCallback<Boolean>
 {

@@ -1,8 +1,9 @@
 package ru.net.serbis.folder.player.task;
 
 import android.content.*;
-import ru.net.serbis.folder.player.data.*;
 import ru.net.serbis.folder.player.util.*;
+import ru.net.serbis.utils.*;
+import ru.net.serbis.utils.bean.*;
 
 public class FileCallback implements TaskCallback<String>
 {

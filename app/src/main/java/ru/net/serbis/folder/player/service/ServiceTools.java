@@ -3,9 +3,9 @@ package ru.net.serbis.folder.player.service;
 import android.os.*;
 import java.util.*;
 import ru.net.serbis.folder.player.connection.*;
-import ru.net.serbis.folder.player.data.*;
 import ru.net.serbis.folder.player.task.*;
-import ru.net.serbis.folder.player.util.*;
+import ru.net.serbis.utils.*;
+import ru.net.serbis.utils.bean.*;
 
 public abstract class ServiceTools extends Util
 {

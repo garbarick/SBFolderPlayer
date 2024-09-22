@@ -8,6 +8,7 @@ import ru.net.serbis.folder.player.data.*;
 import ru.net.serbis.folder.player.notification.*;
 import ru.net.serbis.folder.player.receiver.*;
 import ru.net.serbis.folder.player.util.*;
+import ru.net.serbis.utils.*;
 
 public class PlayerService extends Service
 {

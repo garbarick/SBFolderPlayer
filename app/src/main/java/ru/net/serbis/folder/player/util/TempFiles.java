@@ -4,6 +4,7 @@ import android.content.*;
 import java.io.*;
 import java.util.*;
 import ru.net.serbis.folder.player.data.*;
+import ru.net.serbis.utils.*;
 
 public class TempFiles extends Util
 {
@@ -21,7 +22,7 @@ public class TempFiles extends Util
     {
         super.set(context);
         String data = Preferences.get().getString(Constants.TEMP_FILES, "[]");
-        files = new JsonTools().parseMap(data);
+        files = new JsonMapTools().parseMap(data);
         clearFailed();
     }
 
@@ -30,14 +31,14 @@ public class TempFiles extends Util
         File dir = new File(Params.TEMP_FOLDER.getValue());
         dir.mkdirs();
         File tempFile = new File(temp);
-        File appFile = new File(dir, new Date().getTime() + "." + IOTool.get().getExt(temp));
-        IOTool.get().moveFileQuietly(tempFile, appFile, Params.BUFFER_SIZE.getValue());
+        File appFile = new File(dir, new Date().getTime() + "." + FilesTool.get().getExt(temp));
+        FilesTool.get().moveFileQuietly(tempFile, appFile, Params.BUFFER_SIZE.getValue());
         temp = appFile.getAbsolutePath();
         
         files.put(original, temp);
         removeFirst(Params.TEMP_FILES_COUNT.getValue());
 
-        Preferences.get().setString(Constants.TEMP_FILES, new JsonTools().toJson(files));
+        Preferences.get().setString(Constants.TEMP_FILES, new JsonMapTools().toJson(files));
 
         return temp;
     }

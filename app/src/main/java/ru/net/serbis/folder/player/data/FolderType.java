@@ -1,8 +1,10 @@
 package ru.net.serbis.folder.player.data;
 
-import android.content.*;
 import java.util.*;
 import ru.net.serbis.folder.player.*;
+import ru.net.serbis.utils.*;
+
+import ru.net.serbis.folder.player.R;
 
 public enum FolderType
 {
@@ -19,9 +21,9 @@ public enum FolderType
         this.nameId = nameId;
     }
 
-    public void initName(Context context)
+    public void initName()
     {
-        name = context.getResources().getString(nameId);
+        name = Strings.get().get(nameId);
         VALUES.put(name, this);
     }
 
@@ -34,5 +36,13 @@ public enum FolderType
     public static FolderType get(String name)
     {
         return VALUES.get(name);
+    }
+
+    public static void initNames()
+    {
+        for (FolderType item : FolderType.class.getEnumConstants())
+        {
+            item.initName();
+        }
     }
 }

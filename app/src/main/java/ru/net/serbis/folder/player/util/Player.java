@@ -10,6 +10,9 @@ import ru.net.serbis.folder.player.notification.*;
 import ru.net.serbis.folder.player.receiver.*;
 import ru.net.serbis.folder.player.service.*;
 import ru.net.serbis.folder.player.task.*;
+import ru.net.serbis.utils.*;
+
+import ru.net.serbis.folder.player.R;
 
 public class Player extends Util implements MediaPlayer.OnErrorListener, MediaPlayer.OnCompletionListener
 {
@@ -66,7 +69,7 @@ public class Player extends Util implements MediaPlayer.OnErrorListener, MediaPl
         this.files.clear();
         this.files.addAll(files);
         saveFiles(files);
-        UITool.get().runOnUiThread(
+        HelpTool.get().runOnUiThread(
             new Runnable()
             {
                 @Override
@@ -105,7 +108,7 @@ public class Player extends Util implements MediaPlayer.OnErrorListener, MediaPl
     {
         this.position = position;
         savePisition(position);
-        UITool.get().runOnUiThread(
+        HelpTool.get().runOnUiThread(
             new Runnable()
             {
                 @Override
@@ -251,7 +254,7 @@ public class Player extends Util implements MediaPlayer.OnErrorListener, MediaPl
         {
             return;
         }
-        UITool.get().runOnUiThread(
+        HelpTool.get().runOnUiThread(
             new Runnable()
             {
                 @Override
@@ -272,7 +275,7 @@ public class Player extends Util implements MediaPlayer.OnErrorListener, MediaPl
         {
             return;
         }
-        UITool.get().runOnUiThread(
+        HelpTool.get().runOnUiThread(
             new Runnable()
             {
                 @Override
@@ -306,7 +309,7 @@ public class Player extends Util implements MediaPlayer.OnErrorListener, MediaPl
 
     private void playerDuration(final int duration)
     {
-        UITool.get().runOnUiThread(
+        HelpTool.get().runOnUiThread(
             new Runnable()
             {
                 @Override
@@ -340,7 +343,7 @@ public class Player extends Util implements MediaPlayer.OnErrorListener, MediaPl
 
     private void playerProgress(final int position)
     {
-        UITool.get().runOnUiThread(
+        HelpTool.get().runOnUiThread(
             new Runnable()
             {
                 @Override
@@ -482,7 +485,7 @@ public class Player extends Util implements MediaPlayer.OnErrorListener, MediaPl
 
     public void startFileLoading()
     {
-        UITool.get().runOnUiThread(
+        HelpTool.get().runOnUiThread(
             new Runnable()
             {
                 @Override
@@ -499,7 +502,7 @@ public class Player extends Util implements MediaPlayer.OnErrorListener, MediaPl
 
     public void fileLoadProgress(final int progress)
     {
-        UITool.get().runOnUiThread(
+        HelpTool.get().runOnUiThread(
             new Runnable()
             {
                 @Override
@@ -518,7 +521,7 @@ public class Player extends Util implements MediaPlayer.OnErrorListener, MediaPl
     public void finishFileLoading()
     {
         UITool.get().setProgress(false);
-        UITool.get().runOnUiThread(
+        HelpTool.get().runOnUiThread(
             new Runnable()
             {
                 @Override

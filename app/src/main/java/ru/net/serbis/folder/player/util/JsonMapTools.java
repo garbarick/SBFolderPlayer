@@ -2,9 +2,9 @@ package ru.net.serbis.folder.player.util;
 
 import java.util.*;
 import org.json.*;
-import ru.net.serbis.folder.player.data.*;
+import ru.net.serbis.utils.*;
 
-public class JsonTools
+public class JsonMapTools
 {
     public String toJson(Map<String, String> map)
     {
@@ -45,11 +45,6 @@ public class JsonTools
             Log.error(this, e);
         }
         return result;
-    }
-
-    private int getInt(JSONObject item, String key) throws Exception
-    {
-        return item.has(key) ? item.getInt(key) : 0;
     }
 
     private String getString(JSONObject item, String key) throws Exception

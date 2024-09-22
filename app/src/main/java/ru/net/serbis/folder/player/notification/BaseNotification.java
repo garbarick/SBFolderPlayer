@@ -5,7 +5,9 @@ import android.content.*;
 import android.os.*;
 import java.util.*;
 import ru.net.serbis.folder.player.*;
-import ru.net.serbis.folder.player.util.*;
+import ru.net.serbis.utils.*;
+
+import ru.net.serbis.folder.player.R;
 
 public class BaseNotification extends Notification.Builder
 {

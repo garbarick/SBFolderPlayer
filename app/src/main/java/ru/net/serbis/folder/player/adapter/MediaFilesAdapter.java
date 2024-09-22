@@ -6,6 +6,9 @@ import android.widget.*;
 import java.io.*;
 import ru.net.serbis.folder.player.*;
 import ru.net.serbis.folder.player.util.*;
+import ru.net.serbis.utils.*;
+
+import ru.net.serbis.folder.player.R;
 
 public class MediaFilesAdapter extends ArrayAdapter<String>
 {
@@ -24,7 +27,7 @@ public class MediaFilesAdapter extends ArrayAdapter<String>
         String path = getItem(position);
 
         TextView numView = UITool.get().findView(view, R.id.num);
-        numView.setText(UITool.get().getNum(position, getCount()));
+        numView.setText(HelpTool.get().getNum(position, getCount()));
         
         TextView nameView = UITool.get().findView(view, R.id.name);
         nameView.setText(new File(path).getName());

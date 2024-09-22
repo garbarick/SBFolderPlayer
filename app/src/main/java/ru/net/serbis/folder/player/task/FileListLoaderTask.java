@@ -6,6 +6,8 @@ import java.io.*;
 import java.util.*;
 import ru.net.serbis.folder.player.data.*;
 import ru.net.serbis.folder.player.util.*;
+import ru.net.serbis.utils.*;
+import ru.net.serbis.utils.bean.*;
 
 public class FileListLoaderTask extends AsyncTask<Object, Integer, List<String>>
 {
@@ -61,7 +63,7 @@ public class FileListLoaderTask extends AsyncTask<Object, Integer, List<String>>
                         result.addAll(loadLocalFiles(file));
                         return false;
                     }
-                    if (IOTool.get().checkExt(file))
+                    if (FilesTool.get().checkExt(file))
                     {
                         return true;
                     }
@@ -75,7 +77,7 @@ public class FileListLoaderTask extends AsyncTask<Object, Integer, List<String>>
             for (File file : files)
             {
                 result.add(file.getAbsolutePath());
-                publishProgress(UITool.get().getPercent(count, ++current));
+                publishProgress(HelpTool.get().getPercent(count, ++current));
             }
         }
         return result;
@@ -91,5 +93,6 @@ public class FileListLoaderTask extends AsyncTask<Object, Integer, List<String>>
     protected void onPostExecute(List<String> result)
     {
         UITool.get().setProgress(false);
+        callback.onResult(result, error);
     }
 }

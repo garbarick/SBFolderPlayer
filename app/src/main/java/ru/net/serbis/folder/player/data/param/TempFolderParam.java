@@ -1,6 +1,7 @@
 package ru.net.serbis.folder.player.data.param;
 
-import android.content.*;
+import android.app.*;
+import ru.net.serbis.utils.param.*;
 
 public class TempFolderParam extends FileParam
 {
@@ -10,9 +11,9 @@ public class TempFolderParam extends FileParam
     }
 
     @Override
-    public void initName(Context context)
+    public void setContext(Activity context)
     {
-        super.initName(context);
-        defaultValue = context.getFilesDir().getAbsolutePath();
+        super.setContext(context);
+        value = context.getFilesDir().getAbsolutePath();
     }
 }

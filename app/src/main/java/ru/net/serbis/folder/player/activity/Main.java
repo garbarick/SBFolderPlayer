@@ -10,13 +10,16 @@ import java.util.*;
 import ru.net.serbis.folder.player.*;
 import ru.net.serbis.folder.player.adapter.*;
 import ru.net.serbis.folder.player.data.*;
-import ru.net.serbis.folder.player.dialog.*;
 import ru.net.serbis.folder.player.extension.share.*;
 import ru.net.serbis.folder.player.listener.*;
 import ru.net.serbis.folder.player.notification.*;
 import ru.net.serbis.folder.player.receiver.*;
 import ru.net.serbis.folder.player.service.*;
 import ru.net.serbis.folder.player.util.*;
+import ru.net.serbis.utils.*;
+import ru.net.serbis.utils.dialog.*;
+
+import ru.net.serbis.folder.player.R;
 
 public class Main extends Activity implements AdapterView.OnItemClickListener, Player.PlayerListener
 {
@@ -52,7 +55,7 @@ public class Main extends Activity implements AdapterView.OnItemClickListener, P
     protected void onCreate(Bundle state)
     {
         super.onCreate(state);
-        SysTool.get().initPermissions(this);
+        new Permissions().initPermissions(this);
         initUi();
         enable(false);
         registerReceiver();
@@ -69,7 +72,7 @@ public class Main extends Activity implements AdapterView.OnItemClickListener, P
 
     private void initUi()
     {
-        UITool.get().setColorTransparent(this, Params.TRANSPARENCY.getValue());
+        HelpTool.get().setColorTransparent(this, Params.TRANSPARENCY.getValue());
         setContentView(getLayout());
 
         main = UITool.get().findView(this, R.id.main);
@@ -229,14 +232,14 @@ public class Main extends Activity implements AdapterView.OnItemClickListener, P
     public void playerDuration(int value)
     {
         seek.setMax(value);
-        trackLength.setText(UITool.get().formatTime(value));
+        trackLength.setText(HelpTool.get().formatTime(value));
     }
 
     @Override
     public void playerProgress(int value)
     {
         seek.setProgress(value);
-        trackSeek.setText(UITool.get().formatTime(value));
+        trackSeek.setText(HelpTool.get().formatTime(value));
     }
 
     @Override

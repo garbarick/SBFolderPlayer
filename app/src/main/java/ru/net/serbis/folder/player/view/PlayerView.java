@@ -10,6 +10,9 @@ import ru.net.serbis.folder.player.data.*;
 import ru.net.serbis.folder.player.receiver.*;
 import ru.net.serbis.folder.player.service.*;
 import ru.net.serbis.folder.player.util.*;
+import ru.net.serbis.utils.*;
+
+import ru.net.serbis.folder.player.R;
 
 public class PlayerView extends Util
 {
@@ -50,7 +53,7 @@ public class PlayerView extends Util
     public void setTrack(RemoteViews views, int position)
     {
         int count = Player.get().getFiles().size();
-        views.setTextViewText(R.id.num, UITool.get().getNum(position, count));
+        views.setTextViewText(R.id.num, HelpTool.get().getNum(position, count));
         views.setTextViewText(R.id.count, String.valueOf(count));
         if (count > 0)
         {
@@ -84,12 +87,12 @@ public class PlayerView extends Util
 
     public void trackSeek(RemoteViews views, int progress)
     {
-        views.setTextViewText(R.id.track_seek, UITool.get().formatTime(progress));
+        views.setTextViewText(R.id.track_seek, HelpTool.get().formatTime(progress));
     }
 
     public void trackLength(RemoteViews views, int duration)
     {
-        views.setTextViewText(R.id.track_lenght, UITool.get().formatTime(duration));
+        views.setTextViewText(R.id.track_lenght, HelpTool.get().formatTime(duration));
     }
     
     public PendingIntent getMain()
@@ -99,7 +102,7 @@ public class PlayerView extends Util
 
     public void setBackground(RemoteViews views, int ... ids)
     {
-        int color = UITool.get().getColorTransparent(Params.WIDGET_TRANSPARENCY.getValue());
+        int color = HelpTool.get().getColorTransparent(Params.WIDGET_TRANSPARENCY.getValue());
         for (int id : ids)
         {
             views.setInt(id, "setBackgroundColor", color);

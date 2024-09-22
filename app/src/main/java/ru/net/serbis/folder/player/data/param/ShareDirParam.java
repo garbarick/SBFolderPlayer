@@ -3,6 +3,7 @@ package ru.net.serbis.folder.player.data.param;
 import android.view.*;
 import android.widget.*;
 import ru.net.serbis.folder.player.extension.share.*;
+import ru.net.serbis.utils.param.*;
 
 public class ShareDirParam extends TextViewParam
 {

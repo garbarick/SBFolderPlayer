@@ -4,12 +4,15 @@ import android.view.*;
 import ru.net.serbis.folder.player.*;
 import ru.net.serbis.folder.player.activity.*;
 import ru.net.serbis.folder.player.data.*;
-import ru.net.serbis.folder.player.dialog.*;
 import ru.net.serbis.folder.player.extension.share.*;
 import ru.net.serbis.folder.player.receiver.*;
 import ru.net.serbis.folder.player.service.*;
 import ru.net.serbis.folder.player.task.*;
-import ru.net.serbis.folder.player.util.*;
+import ru.net.serbis.utils.*;
+import ru.net.serbis.utils.adapter.*;
+import ru.net.serbis.utils.dialog.*;
+
+import ru.net.serbis.folder.player.R;
 
 public class ButtonsListener implements View.OnClickListener
 {
@@ -33,7 +36,7 @@ public class ButtonsListener implements View.OnClickListener
         switch (view.getId())
         {
             case R.id.settings:
-                dialog = new ParamsDialog(activity, R.string.settings, Params.PARAMS);
+                settings();
                 break;
             case R.id.refresh:
                 refreshFilesList();
@@ -54,6 +57,27 @@ public class ButtonsListener implements View.OnClickListener
                 PlayerReceiver.sendAction(activity, PlayerActions.NEXT);
                 break;
         }
+    }
+    
+    private void settings()
+    {
+        dialog = new ParamsDialog(activity, R.string.settings, Params.PARAMS)
+        {
+            @Override
+            public void ok(ParamsAdapter adapter)
+            {
+                super.ok(adapter);
+                PlayerReceiver.sendAction(activity, PlayerActions.NOTIFY);
+            }
+            
+            @Override
+            public void reset(ParamsAdapter adapter)
+            {
+                super.reset(adapter);
+                PlayerReceiver.sendAction(activity, PlayerActions.NOTIFY);
+            }
+        };
+        dialog.show();
     }
 
     public void refreshFilesList()

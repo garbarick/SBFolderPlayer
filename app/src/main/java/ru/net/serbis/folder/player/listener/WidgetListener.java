@@ -5,6 +5,7 @@ import android.content.*;
 import java.util.*;
 import ru.net.serbis.folder.player.util.*;
 import ru.net.serbis.folder.player.widget.*;
+import ru.net.serbis.utils.*;
 
 public class WidgetListener extends Util implements Player.PlayerListener
 {

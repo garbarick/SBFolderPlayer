@@ -3,7 +3,7 @@ package ru.net.serbis.folder.player.receiver;
 import android.content.*;
 import android.view.*;
 import ru.net.serbis.folder.player.service.*;
-import ru.net.serbis.folder.player.util.*;
+import ru.net.serbis.utils.*;
 
 public class MediaButtonReceiver extends BroadcastReceiver
 {  

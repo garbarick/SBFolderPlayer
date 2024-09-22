@@ -2,8 +2,8 @@ package ru.net.serbis.folder.player.task;
 
 import java.util.*;
 import ru.net.serbis.folder.player.activity.*;
-import ru.net.serbis.folder.player.data.*;
-import ru.net.serbis.folder.player.util.*;
+import ru.net.serbis.utils.*;
+import ru.net.serbis.utils.bean.*;
 
 public class FilesListCallback implements TaskCallback<List<String>>
 {

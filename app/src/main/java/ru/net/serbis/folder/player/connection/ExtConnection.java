@@ -3,7 +3,7 @@ package ru.net.serbis.folder.player.connection;
 import android.app.*;
 import android.content.*;
 import android.os.*;
-import ru.net.serbis.folder.player.util.*;
+import ru.net.serbis.utils.*;
 
 public abstract class ExtConnection implements ServiceConnection
 {

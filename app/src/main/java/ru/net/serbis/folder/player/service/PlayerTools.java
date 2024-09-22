@@ -1,6 +1,7 @@
 package ru.net.serbis.folder.player.service;
 
 import android.os.*;
+import ru.net.serbis.folder.player.*;
 import ru.net.serbis.folder.player.connection.*;
 import ru.net.serbis.folder.player.task.*;
 
@@ -16,6 +17,7 @@ public class PlayerTools extends ServiceTools
     @Override
     protected ExtConnection getConnection()
     {
+        App app = (App) context.getApplicationContext();
         return app.getPlayerConnection();
     }
 

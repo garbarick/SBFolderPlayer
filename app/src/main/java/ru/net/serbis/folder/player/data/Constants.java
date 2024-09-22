@@ -10,8 +10,6 @@ public interface Constants
     int ERROR_ACTIVITIES = 402;
     int ERROR_CLEAR_TRASH = 403;
     int ERROR_LOAD_FILE_LIST = 404;
-    String THROWABLE = "THROWABLE";
-    String TITLE = "TITLE";
     String RESOURCE = "RESOURCE";
     String MEDIA_FILES = "MEDIA_FILES";
     String LAST_MEDIA_FILE = "LAST_MEDIA_FILE";

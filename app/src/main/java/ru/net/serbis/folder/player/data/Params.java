@@ -3,10 +3,11 @@ package ru.net.serbis.folder.player.data;
 import ru.net.serbis.folder.player.*;
 import ru.net.serbis.folder.player.data.param.*;
 import ru.net.serbis.folder.player.util.*;
+import ru.net.serbis.utils.param.*;
 
 public interface Params
 {
-    FileParam MUSIC_LOCAL_FOLDER = new FileParam(R.string.music_local_folder, IOTool.get().getMusicFolderPath(), true, false);
+    FileParam MUSIC_LOCAL_FOLDER = new FileParam(R.string.music_local_folder, FilesTool.get().getMusicFolderPath(), true, false);
     ShareDirParam MUSIC_SHARE_FOLDER = new ShareDirParam(R.string.music_share_folder, null);
     EditNumberParam BUFFER_SIZE = new EditNumberParam(R.string.buffer_size, 10240);
     TempFolderParam TEMP_FOLDER = new TempFolderParam(R.string.temp_folder);

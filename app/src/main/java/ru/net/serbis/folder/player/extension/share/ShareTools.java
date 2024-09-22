@@ -10,6 +10,7 @@ import ru.net.serbis.folder.player.data.*;
 import ru.net.serbis.folder.player.service.*;
 import ru.net.serbis.folder.player.task.*;
 import ru.net.serbis.folder.player.util.*;
+import ru.net.serbis.utils.bean.*;
 
 public class ShareTools extends ServiceTools
 {
@@ -23,6 +24,7 @@ public class ShareTools extends ServiceTools
     @Override
     protected ExtConnection getConnection()
     {
+        App app = (App) context.getApplicationContext();
         return app.getShareConnection();
     }
 
@@ -63,7 +65,7 @@ public class ShareTools extends ServiceTools
 
     private TaskError validateUploadFile(String filePath, String shareDir)
     {
-        TaskError error = error = new TaskError(context, Constants.ERROR_FILE_IS_NOT_FOUND, R.string.error_file_is_not_found);
+        TaskError error = error = new TaskError(Constants.ERROR_FILE_IS_NOT_FOUND, R.string.error_file_is_not_found);
         if (TextUtils.isEmpty(filePath) ||
             TextUtils.isEmpty(shareDir))
         {
@@ -99,7 +101,7 @@ public class ShareTools extends ServiceTools
                 {
                     if (msg.getData().containsKey(Share.FILES_LIST))
                     {
-                        onResult(callback, IOTool.get().findFiles(msg.getData().getString(Share.FILES_LIST)), null);
+                        onResult(callback, FilesTool.get().findFiles(msg.getData().getString(Share.FILES_LIST)), null);
                         return;
                     }
                     checkMessage(callback, msg);
@@ -140,7 +142,7 @@ public class ShareTools extends ServiceTools
 
     private TaskError validateFile(String path)
     {
-        TaskError error = error = new TaskError(context, Constants.ERROR_FILE_IS_NOT_FOUND, R.string.error_file_is_not_found);
+        TaskError error = error = new TaskError(Constants.ERROR_FILE_IS_NOT_FOUND, R.string.error_file_is_not_found);
         if (TextUtils.isEmpty(path))
         {
             return error;
